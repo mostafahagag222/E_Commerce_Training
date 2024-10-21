@@ -47,7 +47,7 @@ namespace E_Commerce1DB_V01.Repositories
                 LastName = a.LastName,
                 State = a.State,
                 Street = a.Street,
-                zipcode = a.ZipCode
+                ZipCode = a.ZipCode
             }).FirstOrDefaultAsync();
         }
     }

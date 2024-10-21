@@ -13,6 +13,6 @@ namespace E_Commerce1DB_V01.DTOs
         public string Street { get; set; }
         public string City { get; set; }
         public string State { get; set; }
-        public string zipcode { get; set; }
+        public string ZipCode { get; set; }
     }
 }
