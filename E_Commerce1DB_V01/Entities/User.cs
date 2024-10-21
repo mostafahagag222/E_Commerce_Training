@@ -18,6 +18,7 @@ namespace E_Commerce1DB_V01.Repositories
         //navigational
         public virtual List<Cart> Carts { get; set; } = new List<Cart>();
         public virtual List<Address> Addresses { get; set; } = new List<Address>();
+        public virtual List<Order> Orders { get; set; } = new List<Order>();
 
     }
 }

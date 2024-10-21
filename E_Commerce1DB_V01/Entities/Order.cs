@@ -1,4 +1,5 @@
-﻿using System;
+﻿using E_Commerce1DB_V01.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,10 @@ namespace E_Commerce1DB_V01
         public DateTime Updated { get; set; }
         public int TotalQuantity { get; set; }
         public Decimal TotalPrice { get; set; }
+
+        //navigational
+        public virtual User User { get; set; } 
+        public virtual Cart Cart { get; set; }
 
 
     }
