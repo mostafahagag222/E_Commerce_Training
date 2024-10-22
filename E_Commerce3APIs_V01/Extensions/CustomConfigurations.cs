@@ -60,6 +60,7 @@ namespace E_Commerce3APIs_V01
             services.AddScoped<ICartItemService, CartItemService>();
             services.AddScoped<IShippingMethodService, ShippingMethodService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IPaymentService, PaymentService>();
 
             //cors policy
             services.AddCors(opt =>

@@ -16,10 +16,12 @@ namespace E_Commerce1DB_V01.Entities
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public string AdditionalDetails { get; set; }
+        public string PaymentRequestUrl { get; set; }
 
         //navigational
-        public User User { get; set; }
-        public Order Order { get; set; }
+        public virtual User User { get; set; }
+        public virtual Order Order { get; set; }
+        public virtual PaymentLog PaymentLog { get; set; }
 
     }
 }

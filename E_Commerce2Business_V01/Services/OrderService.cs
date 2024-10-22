@@ -21,13 +21,10 @@ namespace E_Commerce2Business_V01.Services
         public async Task CreateOrderAsync(string basketId)
         {
             /*
-             * create order
-             * fetch basket items in basketitemdto{including price from product}
-             * map them into order items
-             * add them to order items
-             * update order after each add
-             * convert basket items to order items with product current price
-             * give them the created orderid
+             *get list of cart items dto
+             *get shipping price
+             *dictionary of prices key have product price value have cart item price 
+             *call it OrderDTO
              */
             var order = new Order()
             {
@@ -38,11 +35,13 @@ namespace E_Commerce2Business_V01.Services
                 TotalPrice = 0,
                 OrderStatus = OrderStatus.PendingPayment
             };
-            await _unitOfWork.BeginTransactionAsync();
             await _unitOfWork.OrderRepository.AddAsync(order);
+            if (await _unitOfWork.SaveChangesAsync() < 1)
+                throw new InternalServerErrorException("couldn't crate order");
             await _unitOfWork.OrderItemRepository.TransferCartItemsToOrderItemsAsync(basketId);
-            await _unitOfWork.CommitTransactionAsync();
-            
+            if (await _unitOfWork.SaveChangesAsync() < 1)
+                throw new InternalServerErrorException("something went wrong");
+
         }
 
         public Task<RedirectionUrlDTO> CreatePaymentRequest(string basketId)
