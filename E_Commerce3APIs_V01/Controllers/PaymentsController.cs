@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using E_Commerce1DB_V01.DTOs;
+using E_Commerce2Business_V01.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -14,12 +16,19 @@ namespace E_Commerce3APIs_V01.Controllers
     public class PaymentsController : BaseAPIController
     {
         //private readonly 
+        private readonly IPaymentService _paymentService;
+        private readonly IOrderService _orderService;
+        public PaymentsController(IPaymentService paymentService, IOrderService orderService)
+        {
+            _paymentService = paymentService;
+            _orderService = orderService;
+        }
         [HttpPost("{basketId}")]
         public async Task<IActionResult> CreatePaymentRequest([FromRoute] string basketId)
         {
-            using var httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer  jtest123");
-            return Ok(new { threeDSecureUrl="https://facebook.com" });
+            await _orderService.CreateOrderAsync(basketId);
+            RedirectionUrlDTO redirectionUrlDTO = await _orderService.CreatePaymentRequest(basketId);
+            return Ok(redirectionUrlDTO);
         }
 
         [HttpGet("test/test")]

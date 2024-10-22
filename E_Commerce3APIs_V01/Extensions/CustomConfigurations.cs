@@ -45,6 +45,10 @@ namespace E_Commerce3APIs_V01
             services.AddScoped<Lazy<ICartRepository>>(provider => new Lazy<ICartRepository>(() => provider.GetRequiredService<ICartRepository>()));
             services.AddScoped<IShippingMethodRepository, ShippingMethodRepository>();
             services.AddScoped<Lazy<IShippingMethodRepository>>(provider => new Lazy<IShippingMethodRepository>(() => provider.GetRequiredService<IShippingMethodRepository>()));
+            services.AddScoped<IOrderItemRepository, OrderItemRepository>();
+            services.AddScoped<Lazy<IOrderItemRepository>>(provider => new Lazy<IOrderItemRepository>(() => provider.GetRequiredService<IOrderItemRepository>())); 
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<Lazy<IOrderRepository>>(provider => new Lazy<IOrderRepository>(() => provider.GetRequiredService<IOrderRepository>()));
 
             //unit of work DI
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -54,6 +58,7 @@ namespace E_Commerce3APIs_V01
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICartServices, CartServices>();
             services.AddScoped<ICartItemService, CartItemService>();
+            services.AddScoped<IShippingMethodService, ShippingMethodService>();
             services.AddScoped<IOrderService, OrderService>();
 
             //cors policy

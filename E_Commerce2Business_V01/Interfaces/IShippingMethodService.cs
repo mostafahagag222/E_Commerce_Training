@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace E_Commerce2Business_V01.Interfaces
 {
-    public interface IOrderService
+    public interface IShippingMethodService
     {
-        Task CreateOrderAsync(string basketId);
-        Task<RedirectionUrlDTO> CreatePaymentRequest(string basketId);
+        Task<List<DeliveryMethodDTO>> GetDeliveryMethodsDTOAsync();
     }
 }

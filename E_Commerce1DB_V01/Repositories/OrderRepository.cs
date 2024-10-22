@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace E_Commerce1DB_V01.Repositories
 {
-    public class OrderRepository
+    public class OrderRepository : GenericRepository<Order>, IOrderRepository
     {
-
+        private readonly ECPContext context;
+        public OrderRepository(ECPContext context) : base(context)
+        {
+            this.context = context;
+        }
     }
 }

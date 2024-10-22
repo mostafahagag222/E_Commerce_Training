@@ -11,17 +11,17 @@ namespace E_Commerce3APIs_V01.Controllers
     [ApiController]
     public class OrdersController : BaseAPIController
     {
-        private readonly IOrderService _orderService;
+        private readonly IShippingMethodService _shippingMethodService;
 
-        public OrdersController(IOrderService orderService)
+        public OrdersController(IShippingMethodService orderService)
         {
-            _orderService = orderService;
+            _shippingMethodService = orderService;
         }
 
         [HttpGet("DeliveryMethods")]
         public async Task<IActionResult> GetDeliveryMethods()
         {
-            List<DeliveryMethodDTO> deliveryMethods = await _orderService.GetDeliveryMethodsDTOAsync();
+            List<DeliveryMethodDTO> deliveryMethods = await _shippingMethodService.GetDeliveryMethodsDTOAsync();
             return Ok(deliveryMethods);
         }
     }

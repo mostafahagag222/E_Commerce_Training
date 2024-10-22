@@ -15,6 +15,8 @@ namespace E_Commerce1DB_V01
         private readonly Lazy<ICartRepository> _cartRepository;
         private readonly Lazy<ICartItemRepository> _cartItemRepository;
         private readonly Lazy<IShippingMethodRepository> _shippingMethodRepository;
+        private readonly Lazy<IOrderRepository> _orderRepository;
+        private readonly Lazy<IOrderItemRepository> _orderItemRepository;
         private IDbContextTransaction _currentTransaction;
 
         public UnitOfWork(ECPContext context,
@@ -24,7 +26,9 @@ namespace E_Commerce1DB_V01
                           Lazy<ITypeRepository> typeRepository,
                           Lazy<ICartRepository> cartRepository,
                           Lazy<ICartItemRepository> cartItemRepository,
-                          Lazy<IShippingMethodRepository> shippingMethodRepository)
+                          Lazy<IShippingMethodRepository> shippingMethodRepository,
+                          Lazy<IOrderItemRepository> orderItemRepository,
+                          Lazy<IOrderRepository> orderRepository)
         {
             _context = context;
             _userRepository = userRepository;
@@ -34,6 +38,8 @@ namespace E_Commerce1DB_V01
             _cartRepository = cartRepository;
             _cartItemRepository = cartItemRepository;
             _shippingMethodRepository = shippingMethodRepository;
+            _orderItemRepository = orderItemRepository;
+            _orderRepository = orderRepository;
         }
         public IUserRepository UserRepository => _userRepository.Value;
         public IProductRepository ProductRepository => _productRepository.Value;
@@ -41,6 +47,8 @@ namespace E_Commerce1DB_V01
         public ITypeRepository TypeRepository => _typeRepository.Value;
         public ICartRepository CartRepository => _cartRepository.Value;
         public ICartItemRepository CartItemRepository => _cartItemRepository.Value;
+        public IOrderRepository OrderRepository => _orderRepository.Value;
+        public IOrderItemRepository OrderItemRepository => _orderItemRepository.Value;
         public IShippingMethodRepository ShippingMethodRepository => _shippingMethodRepository.Value;
 
         public async Task<int> SaveChangesAsync()

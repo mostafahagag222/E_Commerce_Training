@@ -26,4 +26,11 @@ namespace E_Commerce1DB_V01
         EGP,
         SAR
     }
+    public enum OrderStatus
+    {
+        None = 0,
+        PendingPayment,
+        PendingDelivery,
+        Delivered
+    }
 }
