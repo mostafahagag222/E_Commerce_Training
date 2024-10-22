@@ -31,6 +31,7 @@ namespace E_Commerce1DB_V01
         public DbSet<ShippingMethod> ShippingMethods { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Type> Types { get; set; }
+        public DbSet<Payment> Payments { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

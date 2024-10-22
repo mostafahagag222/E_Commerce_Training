@@ -20,4 +20,10 @@ namespace E_Commerce1DB_V01
         priceAsc,
         priceDesc
     }
+    public enum Currency
+    {
+        USD,
+        EGP,
+        SAR
+    }
 }

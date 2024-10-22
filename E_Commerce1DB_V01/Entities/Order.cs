@@ -1,4 +1,5 @@
-﻿using E_Commerce1DB_V01.Repositories;
+﻿using E_Commerce1DB_V01.Entities;
+using E_Commerce1DB_V01.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,8 @@ namespace E_Commerce1DB_V01
         //navigational
         public virtual User User { get; set; } 
         public virtual Cart Cart { get; set; }
+        public virtual List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+        public virtual List<Payment> Payments { get; set; } = new List<Payment>();
 
 
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using E_Commerce1DB_V01.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
@@ -19,6 +20,7 @@ namespace E_Commerce1DB_V01.Repositories
         public virtual List<Cart> Carts { get; set; } = new List<Cart>();
         public virtual List<Address> Addresses { get; set; } = new List<Address>();
         public virtual List<Order> Orders { get; set; } = new List<Order>();
+        public virtual List<Payment> Payments { get; set; } = new List<Payment>();
 
     }
 }

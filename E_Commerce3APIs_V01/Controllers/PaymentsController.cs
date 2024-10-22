@@ -13,9 +13,12 @@ namespace E_Commerce3APIs_V01.Controllers
     [ApiController]
     public class PaymentsController : BaseAPIController
     {
-        [HttpPost("{id}")]
-        public async Task<IActionResult> CreatePaymentRequest([FromRoute] string id)
+        //private readonly 
+        [HttpPost("{basketId}")]
+        public async Task<IActionResult> CreatePaymentRequest([FromRoute] string basketId)
         {
+            using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer  jtest123");
             return Ok(new { threeDSecureUrl="https://facebook.com" });
         }
 
