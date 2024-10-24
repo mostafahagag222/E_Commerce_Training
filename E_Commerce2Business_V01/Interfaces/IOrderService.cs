@@ -10,6 +10,5 @@ namespace E_Commerce2Business_V01.Interfaces
     public interface IOrderService
     {
         Task CreateOrderAsync(string basketId);
-        Task<RedirectionUrlDTO> CreatePaymentRequest(string basketId);
     }
 }

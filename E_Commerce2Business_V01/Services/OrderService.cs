@@ -24,29 +24,49 @@ namespace E_Commerce2Business_V01.Services
              *get list of cart items dto
              *get shipping price
              *dictionary of prices key have product price value have cart item price 
-             *call it OrderDTO
+             *call it AddOrderDTO
              */
+            var OrderDTO = await _unitOfWork.OrderRepository.GetOrderDTOAsync(basketId);
+            CheckPriceChanges(OrderDTO.Items);
+            var OrderItems = OrderDTO.Items.Select(i => new OrderItem()
+            {
+                OrderTotalPrice=0,
+                Price = i.ProductPrice,
+                Quantity = i.Quantity,
+                ProductId = i.ProductId,
+                TotalPrice = i.TotalPrice
+            }).ToList();
             var order = new Order()
             {
+                OrderItems = OrderItems,
                 CartId = basketId,
                 Created = DateTime.Now,
                 Updated = DateTime.Now,
-                TotalQuantity =0,
-                TotalPrice = 0,
+                TotalQuantity =OrderItems.Sum(o=>o.Quantity),
+                TotalPrice = OrderItems.Sum(o=>o.TotalPrice)+OrderDTO.ShippingPrice,
                 OrderStatus = OrderStatus.PendingPayment
             };
             await _unitOfWork.OrderRepository.AddAsync(order);
             if (await _unitOfWork.SaveChangesAsync() < 1)
                 throw new InternalServerErrorException("couldn't crate order");
-            await _unitOfWork.OrderItemRepository.TransferCartItemsToOrderItemsAsync(basketId);
-            if (await _unitOfWork.SaveChangesAsync() < 1)
-                throw new InternalServerErrorException("something went wrong");
+            //await _unitOfWork.OrderItemRepository.TransferCartItemsToOrderItemsAsync(basketId);
+            //if (await _unitOfWork.SaveChangesAsync() < 1)
+            //    throw new InternalServerErrorException("something went wrong");
 
         }
 
-        public Task<RedirectionUrlDTO> CreatePaymentRequest(string basketId)
+        private void CheckPriceChanges(List<CartItemDTO> items)
         {
-            throw new NotImplementedException();
+            var ChangedPricesProductsIds = new List<int>();
+            foreach (var item in items)
+            {
+                if (item.ProductPrice != item.CartItemPrice)
+                    ChangedPricesProductsIds.Add(item.ProductId);
+            }
+            var number = ChangedPricesProductsIds.Count;
+            if (number > 0)
+                throw new ConflictException($"{number} cart items prices changed");
         }
+
     }
 }

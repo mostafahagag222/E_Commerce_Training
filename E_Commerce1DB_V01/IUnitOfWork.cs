@@ -19,6 +19,7 @@ namespace E_Commerce1DB_V01
         ICartRepository CartRepository { get; }
         IOrderRepository OrderRepository { get; }
         IOrderItemRepository OrderItemRepository { get; }
+        IPaymentRepository PaymentRepository { get; }
 
         //IPurchaseRepository PurchaseRepository { get; }
 

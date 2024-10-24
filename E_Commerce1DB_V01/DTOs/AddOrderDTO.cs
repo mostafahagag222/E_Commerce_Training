@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace E_Commerce1DB_V01.DTOs
 {
-    public class OrderDTO
+    public class AddOrderDTO
     {
         public List<CartItemDTO> Items { get; set; }
-        public Dictionary<decimal,decimal> ProductCartItemPrices { get; set; }
         public decimal ShippingPrice { get; set; }
     }
 }

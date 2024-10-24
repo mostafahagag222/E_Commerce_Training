@@ -87,7 +87,7 @@ namespace E_Commerce2Business_V01.Services
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var token = new JwtSecurityToken
                 (
-                expires: DateTime.Now.AddHours(1),
+                expires: DateTime.Now.AddYears(1),
                 signingCredentials: credentials,
                 claims: c
                 );

@@ -13,6 +13,7 @@ namespace E_Commerce1DB_V01.Repositories
         Task AddDeliveryMethodAsync(string id, int deliveryMethodId);
         Task<bool> CheckExistenceByID(string id);
         Task DeleteCartAsync(string id);
+        Task<List<(decimal ProductPrice, decimal CartItemPrice , int ProductId)>> GetProductAndCartItemPrices(string cartId);
         Task<bool> UpdateCartAfterAddingCartItemAsync(string cartID, decimal itemPrice);
         Task<bool> UpdateCartAfterRemovingCartItemAsync(string cartID, decimal itemPrice);
     }

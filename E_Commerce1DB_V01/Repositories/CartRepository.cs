@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,6 +29,19 @@ namespace E_Commerce1DB_V01.Repositories
         {
             var cart = await context.Carts.FirstOrDefaultAsync(c => c.Id == id);
             context.Remove(cart);
+        }
+        public async Task<List<(decimal ProductPrice, decimal CartItemPrice, int ProductId)>> GetProductAndCartItemPrices(string cartId)
+        {
+            var result = await (from ci in context.CartItems
+                                where ci.CartID == cartId
+                                select new
+                                {
+                                    ProductPrice = ci.Product.Price,
+                                    CartItemPrice = ci.Price,
+                                    ProductId = ci.ProductID
+                                }
+                                ).ToListAsync();
+            return result.Select(r => (r.ProductPrice, r.CartItemPrice, r.ProductId)).ToList();
         }
 
         public async Task<bool> UpdateCartAfterAddingCartItemAsync(string cartID, decimal itemPrice)

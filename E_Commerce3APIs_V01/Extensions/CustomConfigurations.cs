@@ -49,6 +49,8 @@ namespace E_Commerce3APIs_V01
             services.AddScoped<Lazy<IOrderItemRepository>>(provider => new Lazy<IOrderItemRepository>(() => provider.GetRequiredService<IOrderItemRepository>())); 
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<Lazy<IOrderRepository>>(provider => new Lazy<IOrderRepository>(() => provider.GetRequiredService<IOrderRepository>()));
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<Lazy<IPaymentRepository>>(provider => new Lazy<IPaymentRepository>(() => provider.GetRequiredService<IPaymentRepository>()));
 
             //unit of work DI
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -61,6 +63,8 @@ namespace E_Commerce3APIs_V01
             services.AddScoped<IShippingMethodService, ShippingMethodService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IPaymentService, PaymentService>();
+
+            //payment request configurations
 
             //cors policy
             services.AddCors(opt =>

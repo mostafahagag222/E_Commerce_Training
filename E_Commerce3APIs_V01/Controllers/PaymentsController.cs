@@ -1,5 +1,6 @@
 ﻿using E_Commerce1DB_V01.DTOs;
 using E_Commerce2Business_V01.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -23,11 +24,13 @@ namespace E_Commerce3APIs_V01.Controllers
             _paymentService = paymentService;
             _orderService = orderService;
         }
+        [Authorize]
         [HttpPost("{basketId}")]
         public async Task<IActionResult> CreatePaymentRequest([FromRoute] string basketId)
         {
-            await _orderService.CreateOrderAsync(basketId);
-            RedirectionUrlDTO redirectionUrlDTO = await _orderService.CreatePaymentRequest(basketId);
+            var userId = ExtractIdFromToken();
+            //await _orderService.CreateOrderAsync(basketId);
+            RedirectionUrlDTO redirectionUrlDTO = await _paymentService.CreatePaymentRequest(basketId,userId);
             return Ok(redirectionUrlDTO);
         }
 
@@ -86,7 +89,7 @@ namespace E_Commerce3APIs_V01.Controllers
                     email = "kakde.dharmendra@upayments.com",
                     mobile = "+96566336537"
                 },
-                returnUrl = "https://3c03-154-182-87-107.ngrok-free.app/api/payments/webhook/redirect", // redirect url (first api)
+                returnUrl = "https://cc78-154-182-87-107.ngrok-free.app/api/payments/webhook/redirect", // redirect url (first api)
                 cancelUrl = "https://error.com",
                 notificationUrl = "https://3c03-154-182-87-107.ngrok-free.app/api/payments/webhook/capture", // webhook url (second api)
                 customerExtraData = "User define data"

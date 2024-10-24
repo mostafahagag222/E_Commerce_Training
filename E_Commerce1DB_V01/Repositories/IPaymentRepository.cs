@@ -1,4 +1,4 @@
-﻿using E_Commerce1DB_V01.DTOs;
+﻿using E_Commerce1DB_V01.Entities;
 using E_Commerce1DB_V01.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 
 namespace E_Commerce1DB_V01.Repositories
 {
-    public interface IOrderRepository : IGenericRepository<Order>
+    public interface IPaymentRepository : IGenericRepository<Payment>
     {
-        Task<AddOrderDTO> GetOrderDTOAsync(string basketId);
     }
 }

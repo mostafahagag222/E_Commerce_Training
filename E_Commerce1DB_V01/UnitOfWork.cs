@@ -17,6 +17,7 @@ namespace E_Commerce1DB_V01
         private readonly Lazy<IShippingMethodRepository> _shippingMethodRepository;
         private readonly Lazy<IOrderRepository> _orderRepository;
         private readonly Lazy<IOrderItemRepository> _orderItemRepository;
+        private readonly Lazy<IPaymentRepository> _paymentRepository;
         private IDbContextTransaction _currentTransaction;
 
         public UnitOfWork(ECPContext context,
@@ -28,7 +29,8 @@ namespace E_Commerce1DB_V01
                           Lazy<ICartItemRepository> cartItemRepository,
                           Lazy<IShippingMethodRepository> shippingMethodRepository,
                           Lazy<IOrderItemRepository> orderItemRepository,
-                          Lazy<IOrderRepository> orderRepository)
+                          Lazy<IOrderRepository> orderRepository,
+                          Lazy<IPaymentRepository> paymentRepository)
         {
             _context = context;
             _userRepository = userRepository;
@@ -40,6 +42,7 @@ namespace E_Commerce1DB_V01
             _shippingMethodRepository = shippingMethodRepository;
             _orderItemRepository = orderItemRepository;
             _orderRepository = orderRepository;
+            _paymentRepository = paymentRepository;
         }
         public IUserRepository UserRepository => _userRepository.Value;
         public IProductRepository ProductRepository => _productRepository.Value;
@@ -50,6 +53,7 @@ namespace E_Commerce1DB_V01
         public IOrderRepository OrderRepository => _orderRepository.Value;
         public IOrderItemRepository OrderItemRepository => _orderItemRepository.Value;
         public IShippingMethodRepository ShippingMethodRepository => _shippingMethodRepository.Value;
+        public IPaymentRepository PaymentRepository => _paymentRepository.Value;
 
         public async Task<int> SaveChangesAsync()
         {
