@@ -17,7 +17,6 @@ namespace E_Commerce1DB_V01
         public DateTime Updated { get; set; }
         public int TotalQuantity { get; set; }
         public Decimal TotalPrice { get; set; }
-        public OrderStatus OrderStatus { get; set; }
 
         //navigational
         public virtual User User { get; set; } 

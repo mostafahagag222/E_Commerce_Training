@@ -4,6 +4,7 @@ using E_Commerce1DB_V01;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace E_Commerce1DB_V01.Migrations
 {
     [DbContext(typeof(ECPContext))]
-    partial class ECPContextModelSnapshot : ModelSnapshot
+    [Migration("20241027080019_MakePaymentLogsToPaymentOneToMany")]
+    partial class MakePaymentLogsToPaymentOneToMany
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,9 +84,6 @@ namespace E_Commerce1DB_V01.Migrations
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("GUID")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ShippingMethodID")
                         .HasColumnType("nvarchar(450)");
@@ -417,8 +417,7 @@ namespace E_Commerce1DB_V01.Migrations
                 {
                     b.HasOne("E_Commerce1DB_V01.Cart", "Cart")
                         .WithMany("CartItems")
-                        .HasForeignKey("CartID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CartID");
 
                     b.HasOne("E_Commerce1DB_V01.Product", "Product")
                         .WithMany("CartItems")
@@ -468,8 +467,7 @@ namespace E_Commerce1DB_V01.Migrations
                 {
                     b.HasOne("E_Commerce1DB_V01.Cart", "Cart")
                         .WithOne("Order")
-                        .HasForeignKey("E_Commerce1DB_V01.Order", "CartId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("E_Commerce1DB_V01.Order", "CartId");
 
                     b.HasOne("E_Commerce1DB_V01.Repositories.User", "User")
                         .WithMany("Orders")

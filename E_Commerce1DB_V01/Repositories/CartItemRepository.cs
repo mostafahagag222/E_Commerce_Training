@@ -127,5 +127,18 @@ namespace E_Commerce1DB_V01.Repositories
                 }).FirstOrDefaultAsync();
             return RequiredBasket1;
         }
+        public async Task<List<CreateOrderItemDTO>> GetCartItemsDTOAsync(string basketId)
+        {
+            var items = await (from ci in context.CartItems
+                               where ci.CartID == basketId
+                               select new CreateOrderItemDTO()
+                               {
+                                   Product = ci.Product,
+                                   Quantity = ci.Quantity,
+                                   TotalPrice = ci.Quantity * ci.Product.Price,
+                                   Price = ci.Price
+                               }).ToListAsync();
+            return items;
+        }
     }
 }

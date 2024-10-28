@@ -10,6 +10,6 @@ namespace E_Commerce1DB_V01.Repositories
 {
     public interface IOrderRepository : IGenericRepository<Order>
     {
-        Task<AddOrderDTO> GetOrderDTOAsync(string basketId);
+        Task<int> GetOrderId(string cartId);
     }
 }

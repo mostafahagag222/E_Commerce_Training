@@ -1,4 +1,5 @@
 ﻿using E_Commerce1DB_V01.DTOs;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace E_Commerce2Business_V01.Interfaces
 {
     public interface IOrderService
     {
-        Task CreateOrderAsync(string basketId);
+        Task HandlePaymentResultAsync(IFormCollection formData);
     }
 }

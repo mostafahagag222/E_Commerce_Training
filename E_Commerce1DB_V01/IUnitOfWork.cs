@@ -1,5 +1,6 @@
 ﻿using E_Commerce1DB_V01.Entities;
 using E_Commerce1DB_V01.Repositories;
+using E_Commerce1DB_V01.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace E_Commerce1DB_V01
         IOrderRepository OrderRepository { get; }
         IOrderItemRepository OrderItemRepository { get; }
         IPaymentRepository PaymentRepository { get; }
+        IPaymentLogRepository PaymentLogRepository { get; }
 
         //IPurchaseRepository PurchaseRepository { get; }
 

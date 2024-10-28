@@ -21,7 +21,10 @@ namespace E_Commerce1DB_V01.Entities.Configurations
                 .HasOne(p => p.Order)
                 .WithMany(o => o.Payments)
                 .HasForeignKey(p => p.OrderId);
-
+            builder
+                .HasOne(p => p.Cart)
+                .WithMany(c => c.Payments)
+                .HasForeignKey(p => p.CartId);
         }
     }
 }

@@ -15,7 +15,6 @@ namespace E_Commerce1DB_V01
         public decimal TotalPrice { get; set; }
         public int ProductId {  get; set; }
         public int OrderId {  get; set; }
-        public decimal OrderTotalPrice { get; set; }
 
 
         //navigational

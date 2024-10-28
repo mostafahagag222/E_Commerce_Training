@@ -1,6 +1,10 @@
 ﻿using E_Commerce1DB_V01;
 using E_Commerce1DB_V01.DTOs;
+using E_Commerce1DB_V01.Entities;
 using E_Commerce2Business_V01.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Identity.Client.AppConfig;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,55 +22,81 @@ namespace E_Commerce2Business_V01.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task CreateOrderAsync(string basketId)
+
+        public async Task HandlePaymentResultAsync(IFormCollection formData)
+        {
+            // Serialize the form data directly
+            string responseToJson = JsonConvert.SerializeObject(formData
+                .ToDictionary(x => x.Key, x => x.Value.ToString()));
+            var response = JsonConvert.DeserializeObject<UpaymentsWebHookResponseDTO>(responseToJson);
+            if (response.Result != "CAPTURED")
+            {
+                await _unitOfWork.PaymentRepository.UpdateStatusAsync(response.GUID, PaymentStatus.FailedPayment);
+                if (await _unitOfWork.SaveChangesAsync() < 1)
+                    throw new InternalServerErrorException("couldn't change order status to Failed Payment");
+                return;
+            }
+            else
+            {
+                /* update order status //
+                 * create paymentlog and log response as string and add payment id //
+                 * create order and order items and update stock
+                 * remove basket and its items
+                 */
+                await _unitOfWork.PaymentRepository.UpdateStatusAsync(response.GUID, PaymentStatus.SuccessfulPayment); //no save changes
+                HandlePaymentPaymentDataDTO payment = await _unitOfWork.PaymentRepository.GetHandlePaymentPaymentDataDTO(response.GUID); // 1 
+                await _unitOfWork.PaymentLogRepository.AddAsync(new PaymentLog()
+                {
+                    PaymentId = payment.PaymentId,
+                    PaymentResponse = responseToJson
+                }); // no save changes
+                await CreateOrderAsync(payment.CartId, (int)payment.UserId, payment.Amount);
+                await _unitOfWork.SaveChangesAsync();///////-----------------------------------
+                int orderId = await _unitOfWork.OrderRepository.GetOrderId(payment.CartId);
+                await _unitOfWork.PaymentRepository.UpdateOrderId(orderId,response.GUID); // no save changes
+                await _unitOfWork.CartRepository.DeleteCartAsync(payment.CartId);
+                var saveChanges = await _unitOfWork.SaveChangesAsync();
+                if (saveChanges < 1)
+                    throw new InternalServerErrorException("something went wrong during handling payment");
+            }
+        }
+        private async Task CreateOrderAsync(string basketId, int userID, decimal amount)
         {
             /*
-             *get list of cart items dto
-             *get shipping price
-             *dictionary of prices key have product price value have cart item price 
-             *call it AddOrderDTO
+             * GET CART ITEMS DATA
+             * MAP CART ITEMS DTOS TO ORDER ITEMS
+             * CREATE NEW ORDER WITH ORDER ITEMS INCLUDED
+             * ADD ORDER ITEM WITH EF
+             * UPDATE FETCHED PRODUCTS STOCK
              */
-            var OrderDTO = await _unitOfWork.OrderRepository.GetOrderDTOAsync(basketId);
-            CheckPriceChanges(OrderDTO.Items);
-            var OrderItems = OrderDTO.Items.Select(i => new OrderItem()
+            var items = await _unitOfWork.CartItemRepository.GetCartItemsDTOAsync(basketId); // 2
+            var OrderItems = items.Select(i => new OrderItem()
             {
-                OrderTotalPrice=0,
-                Price = i.ProductPrice,
+                Price = i.Price,
                 Quantity = i.Quantity,
-                ProductId = i.ProductId,
+                ProductId = i.Product.Id,
                 TotalPrice = i.TotalPrice
             }).ToList();
             var order = new Order()
             {
+                UserId = userID,
                 OrderItems = OrderItems,
                 CartId = basketId,
                 Created = DateTime.Now,
                 Updated = DateTime.Now,
-                TotalQuantity =OrderItems.Sum(o=>o.Quantity),
-                TotalPrice = OrderItems.Sum(o=>o.TotalPrice)+OrderDTO.ShippingPrice,
-                OrderStatus = OrderStatus.PendingPayment
+                TotalQuantity = OrderItems.Sum(o => o.Quantity),
+                TotalPrice = amount
             };
-            await _unitOfWork.OrderRepository.AddAsync(order);
-            if (await _unitOfWork.SaveChangesAsync() < 1)
-                throw new InternalServerErrorException("couldn't crate order");
-            //await _unitOfWork.OrderItemRepository.TransferCartItemsToOrderItemsAsync(basketId);
-            //if (await _unitOfWork.SaveChangesAsync() < 1)
-            //    throw new InternalServerErrorException("something went wrong");
-
+            await _unitOfWork.OrderRepository.AddAsync(order); // no save changes
+            UpdateProductsStockAsync(items); // no save changes
         }
-
-        private void CheckPriceChanges(List<CartItemDTO> items)
+        private void UpdateProductsStockAsync(List<CreateOrderItemDTO> items)
         {
-            var ChangedPricesProductsIds = new List<int>();
-            foreach (var item in items)
+            foreach (var cartItem in items)
             {
-                if (item.ProductPrice != item.CartItemPrice)
-                    ChangedPricesProductsIds.Add(item.ProductId);
+                cartItem.Product.UnitsInStock -= cartItem.Quantity;
+                _unitOfWork.ProductRepository.UpdateAsync(cartItem.Product);
             }
-            var number = ChangedPricesProductsIds.Count;
-            if (number > 0)
-                throw new ConflictException($"{number} cart items prices changed");
         }
-
     }
 }

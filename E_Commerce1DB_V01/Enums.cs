@@ -33,4 +33,10 @@ namespace E_Commerce1DB_V01
         PendingDelivery,
         Delivered
     }
+    public enum PaymentStatus
+    {
+        Pending = 0,
+        SuccessfulPayment,
+        FailedPayment
+    }
 }

@@ -14,8 +14,8 @@ namespace E_Commerce1DB_V01.Entities.Configurations
         {
             builder
                 .HasOne(pl => pl.Payment)
-                .WithOne(p => p.PaymentLog)
-                .HasForeignKey<PaymentLog>(pl => pl.PaymentId);
+                .WithMany(p => p.PaymentLogs)
+                .HasForeignKey(pl => pl.PaymentId);
         }
     }
 }

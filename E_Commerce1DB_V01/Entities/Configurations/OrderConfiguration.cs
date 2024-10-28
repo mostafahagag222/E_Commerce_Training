@@ -20,7 +20,8 @@ namespace E_Commerce1DB_V01.Entities.Configurations
             builder
                 .HasOne(o => o.Cart)
                 .WithOne(c => c.Order)
-                .HasForeignKey<Order>(o => o.CartId);
+                .HasForeignKey<Order>(o => o.CartId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

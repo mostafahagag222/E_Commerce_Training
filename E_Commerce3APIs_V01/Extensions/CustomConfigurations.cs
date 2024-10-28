@@ -14,6 +14,7 @@ using E_Commerce2Business_V01.Services;
 using System;
 using E_Commerce1DB_V01.Entities;
 using E_Commerce2Business_V01.Payloads;
+using E_Commerce1DB_V01.Repositories.Interfaces;
 
 namespace E_Commerce3APIs_V01
 {
@@ -51,6 +52,8 @@ namespace E_Commerce3APIs_V01
             services.AddScoped<Lazy<IOrderRepository>>(provider => new Lazy<IOrderRepository>(() => provider.GetRequiredService<IOrderRepository>()));
             services.AddScoped<IPaymentRepository, PaymentRepository>();
             services.AddScoped<Lazy<IPaymentRepository>>(provider => new Lazy<IPaymentRepository>(() => provider.GetRequiredService<IPaymentRepository>()));
+            services.AddScoped<IPaymentLogRepository, PaymentLogRepository>();
+            services.AddScoped<Lazy<IPaymentLogRepository>>(provider => new Lazy<IPaymentLogRepository>(() => provider.GetRequiredService<IPaymentLogRepository>()));
 
             //unit of work DI
             services.AddScoped<IUnitOfWork, UnitOfWork>();

@@ -52,9 +52,6 @@ namespace E_Commerce2Business_V01.Services
         }
         public async Task DeleteCartAsync(string id)
         {
-            await _unitOfWork.CartItemRepository.DeleteRangeByCartId(id);
-            if (await _unitOfWork.SaveChangesAsync() < 1)
-                throw new InternalServerErrorException("couldn't remove cart Items");
             await _unitOfWork.CartRepository.DeleteCartAsync(id);
             if (await _unitOfWork.SaveChangesAsync() < 1)
                 throw new InternalServerErrorException("couldn't remove cart");

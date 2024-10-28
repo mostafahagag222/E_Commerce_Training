@@ -17,5 +17,6 @@ namespace E_Commerce1DB_V01.Repositories
         Task<QuantityUnitsInStockDTO> GetCartItemQuantityAndUnitInStockAsync(string CartId, int cartItemId);
         Task<List<CartItem>> GetCartItemsFroSpecificCart(string cartId);
         Task<BasketDTO> GetBasketDTOAsync(string cartID);
+        Task<List<CreateOrderItemDTO>> GetCartItemsDTOAsync(string basketId);
     }
 }

@@ -10,7 +10,7 @@ namespace E_Commerce1DB_V01.DTOs
     public class PaymentRequestDTO
     {
         [JsonProperty("order")]
-        public PaymentOrderDTO Order { get; set; }
+        public PaymentDataDTO PaymentDataDTO { get; set; }
         [JsonProperty("paymentGateway")]
         public PaymentGatewayDTO PaymentGateway { get; set; }
         [JsonProperty("language")]
@@ -27,10 +27,10 @@ namespace E_Commerce1DB_V01.DTOs
         public ReferenceDTO Reference { get; set; }
     }
 
-    public class PaymentOrderDTO
+    public class PaymentDataDTO
     {
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string GUID { get; set; }
         [JsonProperty("currency")]
         public string Currency { get; set; } = "KWD";
         [JsonProperty("amount")]

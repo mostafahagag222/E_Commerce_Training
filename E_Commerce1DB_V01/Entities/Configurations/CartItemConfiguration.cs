@@ -19,7 +19,8 @@ namespace E_Commerce1DB_V01.Entities.Configurations
             builder
                 .HasOne(ci => ci.Cart)
                 .WithMany(c => c.CartItems)
-                .HasForeignKey(ci => ci.CartID);
+                .HasForeignKey(ci => ci.CartID)
+                .OnDelete(DeleteBehavior.Cascade);
 
         }
     }

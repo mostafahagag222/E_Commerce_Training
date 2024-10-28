@@ -16,27 +16,9 @@ namespace E_Commerce1DB_V01.Repositories
             this.context = context;
         }
 
-        public async Task<AddOrderDTO> GetOrderDTOAsync(string basketId)
+        public async Task<int> GetOrderId(string cartId)
         {
-            var OrderDTO = await (from c in context.Carts
-                                  .Include(c => c.CartItems)
-                                  .ThenInclude(ci => ci.Product)
-                                  .Include(c => c.ShippingMethod)
-                                  where c.Id == basketId
-                                  select new AddOrderDTO()
-                                  {
-                                      Items = c.CartItems.Select(ci => new CartItemDTO()
-                                      {
-                                          ProductPrice = ci.Product.Price,
-                                          ProductId = ci.ProductID,
-                                          Quantity = ci.Quantity,
-                                          TotalPrice = ci.Quantity * ci.Product.Price,
-                                          CartItemPrice = ci.Price
-                                      }).ToList(),
-                                      ShippingPrice = c.ShippingMethod.Price
-                                  }
-                                 ).FirstOrDefaultAsync();
-            return OrderDTO;
+            return await context.Orders.Where(o => o.CartId == cartId).Select(o => o.Id).FirstOrDefaultAsync();
         }
     }
 }

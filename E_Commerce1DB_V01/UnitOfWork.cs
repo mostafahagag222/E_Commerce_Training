@@ -1,6 +1,7 @@
 ﻿using E_Commerce1DB_V01;
 using E_Commerce1DB_V01.Entities;
 using E_Commerce1DB_V01.Repositories;
+using E_Commerce1DB_V01.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace E_Commerce1DB_V01
@@ -18,6 +19,7 @@ namespace E_Commerce1DB_V01
         private readonly Lazy<IOrderRepository> _orderRepository;
         private readonly Lazy<IOrderItemRepository> _orderItemRepository;
         private readonly Lazy<IPaymentRepository> _paymentRepository;
+        private readonly Lazy<IPaymentLogRepository> _paymentLogRepository;
         private IDbContextTransaction _currentTransaction;
 
         public UnitOfWork(ECPContext context,
@@ -30,7 +32,8 @@ namespace E_Commerce1DB_V01
                           Lazy<IShippingMethodRepository> shippingMethodRepository,
                           Lazy<IOrderItemRepository> orderItemRepository,
                           Lazy<IOrderRepository> orderRepository,
-                          Lazy<IPaymentRepository> paymentRepository)
+                          Lazy<IPaymentRepository> paymentRepository,
+                          Lazy<IPaymentLogRepository> paymentLogRepository)
         {
             _context = context;
             _userRepository = userRepository;
@@ -43,6 +46,7 @@ namespace E_Commerce1DB_V01
             _orderItemRepository = orderItemRepository;
             _orderRepository = orderRepository;
             _paymentRepository = paymentRepository;
+            _paymentLogRepository = paymentLogRepository;
         }
         public IUserRepository UserRepository => _userRepository.Value;
         public IProductRepository ProductRepository => _productRepository.Value;
@@ -54,6 +58,7 @@ namespace E_Commerce1DB_V01
         public IOrderItemRepository OrderItemRepository => _orderItemRepository.Value;
         public IShippingMethodRepository ShippingMethodRepository => _shippingMethodRepository.Value;
         public IPaymentRepository PaymentRepository => _paymentRepository.Value;
+        public IPaymentLogRepository PaymentLogRepository => _paymentLogRepository.Value;
 
         public async Task<int> SaveChangesAsync()
         {
