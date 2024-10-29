@@ -16,12 +16,20 @@ namespace E_Commerce2Business_V01.Services
     public class OrderService : IOrderService
     {
         private readonly IUnitOfWork _unitOfWork;
-
         public OrderService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
+        public async Task<List<GetAllOrdersDTO>> GetAllOrdersForUser(int userId)
+        {
+            var orders = (await _unitOfWork.OrderRepository.GetAllOrdersDTO(userId));
+            return orders;
+        }
 
+        public async Task<OrderDTO> GetOrderDetailsById(int orderId)
+        {
+            return await _unitOfWork.OrderRepository.GetOrderDetailsById(orderId);
+        }
 
         public async Task HandlePaymentResultAsync(IFormCollection formData)
         {
@@ -77,6 +85,7 @@ namespace E_Commerce2Business_V01.Services
                 ProductId = i.Product.Id,
                 TotalPrice = i.TotalPrice
             }).ToList();
+            ShippingMethodIdAndSubtotalDTO shippingMethodIdAndSubtotalDTO = await _unitOfWork.CartRepository.GetSMIdAndSubTotalAsync(basketId);
             var order = new Order()
             {
                 UserId = userID,
@@ -85,7 +94,10 @@ namespace E_Commerce2Business_V01.Services
                 Created = DateTime.Now,
                 Updated = DateTime.Now,
                 TotalQuantity = OrderItems.Sum(o => o.Quantity),
-                TotalPrice = amount
+                TotalPrice = amount,
+                ShippingMethodId = shippingMethodIdAndSubtotalDTO.ShippingMethodId,
+                SubTotal = shippingMethodIdAndSubtotalDTO.Subtotal,
+                OrderStatus = OrderStatus.PendingDelivery,
             };
             await _unitOfWork.OrderRepository.AddAsync(order); // no save changes
             UpdateProductsStockAsync(items); // no save changes

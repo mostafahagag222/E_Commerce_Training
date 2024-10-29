@@ -17,12 +17,17 @@ namespace E_Commerce1DB_V01
         public DateTime Updated { get; set; }
         public int TotalQuantity { get; set; }
         public Decimal TotalPrice { get; set; }
+        public OrderStatus OrderStatus { get; set; } = OrderStatus.PendingDelivery;
+        public string ShippingMethodId { get; set; }
+        public decimal SubTotal { get; set; }
 
         //navigational
         public virtual User User { get; set; } 
         public virtual Cart Cart { get; set; }
         public virtual List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
         public virtual List<Payment> Payments { get; set; } = new List<Payment>();
+        public virtual ShippingMethod ShippingMethod { get; set; }
+
 
 
     }

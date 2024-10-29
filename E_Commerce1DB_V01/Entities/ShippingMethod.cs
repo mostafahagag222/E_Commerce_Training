@@ -14,5 +14,8 @@ namespace E_Commerce1DB_V01
         public decimal Price { get; set; }
         public string DeliveryTime { get; set; }
 
+        //navigational
+        public virtual List<Order> Orders { get; set; }
+
     }
 }

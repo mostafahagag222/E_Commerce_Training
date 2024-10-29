@@ -1,4 +1,5 @@
-﻿using E_Commerce1DB_V01.Repositories.Interfaces;
+﻿using E_Commerce1DB_V01.DTOs;
+using E_Commerce1DB_V01.Repositories.Interfaces;
 using E_Commerce2Business_V01.Services;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace E_Commerce1DB_V01.Repositories
         Task<bool> CheckExistenceByID(string id);
         Task DeleteCartAsync(string id);
         Task<GetPaymentAmountDTO> GetProductAndCartItemPrices(string cartId);
+        Task<ShippingMethodIdAndSubtotalDTO> GetSMIdAndSubTotalAsync(string basketId);
         Task<bool> UpdateCartAfterAddingCartItemAsync(string cartID, decimal itemPrice);
         Task<bool> UpdateCartAfterRemovingCartItemAsync(string cartID, decimal itemPrice);
     }

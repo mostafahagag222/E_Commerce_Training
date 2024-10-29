@@ -18,19 +18,16 @@ namespace E_Commerce1DB_V01.Repositories
         {
             this.context = context;
         }
-
         public async Task AddDeliveryMethodAsync(string id, int deliveryMethodId)
         {
             await context.Carts.Where(c => c.Id == id).ExecuteUpdateAsync(c => c.SetProperty(c => c.ShippingMethodID ,deliveryMethodId.ToString()));
         }
-
         public async Task AddGuidToCart(string basketId, string gUID)
         {
             await context.Carts.Where(c => c.Id == basketId)
                 .ExecuteUpdateAsync(c => c
                 .SetProperty(c => c.GUID , gUID));
         }
-
         public async Task<bool> CheckExistenceByID(string id)
         {
             return await context.Carts.AnyAsync(c => c.Id == id);
@@ -57,6 +54,17 @@ namespace E_Commerce1DB_V01.Repositories
                                     }).ToList()
                                 }
                                 ).FirstOrDefaultAsync();
+            return result;
+        }
+        public async Task<ShippingMethodIdAndSubtotalDTO> GetSMIdAndSubTotalAsync(string basketId)
+        {
+            var result = await (from c in context.Carts
+                                where c.Id == basketId
+                                select new ShippingMethodIdAndSubtotalDTO()
+                                {
+                                    ShippingMethodId = c.ShippingMethodID,
+                                    Subtotal = c.CartItems.Sum(ci => ci.Quantity * ci.Quantity)
+                                }).FirstOrDefaultAsync();
             return result;
         }
 
