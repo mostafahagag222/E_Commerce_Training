@@ -66,9 +66,9 @@ namespace E_Commerce1DB_V01.Repositories
             return order;
         }
 
-        public async Task<int> GetOrderId(string cartId)
+        public async Task<int> GetOrderId(string basketId)
         {
-            return await context.Orders.Where(o => o.CartId == cartId).Select(o => o.Id).FirstOrDefaultAsync();
+            return await context.Orders.Where(o => o.BasketId == basketId).Select(o => o.Id).FirstOrDefaultAsync();
         }
     }
 }

@@ -19,13 +19,13 @@ namespace E_Commerce1DB_V01.Entities
         public string PaymentRequestUrl { get; set; }
         public string UniqueIdentifier { get; set; }
         public PaymentStatus Status { get; set; }
-        public string CartId { get; set; }
+        public string BasketId { get; set; }
 
         //navigational
         public virtual User User { get; set; }
         public virtual Order Order { get; set; }
         public virtual List<PaymentLog> PaymentLogs { get; set; } = new List<PaymentLog>();
-        public virtual Cart Cart { get; set; }
+        public virtual Basket Basket { get; set; }
 
     }
 }

@@ -16,8 +16,8 @@ namespace E_Commerce1DB_V01
         IBrandRepository BrandRepository  { get; }
         ITypeRepository TypeRepository { get; }
         IShippingMethodRepository ShippingMethodRepository { get; }
-        ICartItemRepository CartItemRepository { get; }
-        ICartRepository CartRepository { get; }
+        IBasketItemRepository BasketItemRepository { get; }
+        IBasketRepository BasketRepository { get; }
         IOrderRepository OrderRepository { get; }
         IOrderItemRepository OrderItemRepository { get; }
         IPaymentRepository PaymentRepository { get; }

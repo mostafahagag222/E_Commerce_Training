@@ -20,7 +20,7 @@ namespace E_Commerce1DB_V01
         //navigational
         public virtual Type Type { get; set; }
         public virtual Brand Brand { get; set; }
-        public virtual List<CartItem> CartItems { get; set; } = new List<CartItem>();
+        public virtual List<BasketItem> BasketItems { get; set; } = new List<BasketItem>();
 
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace E_Commerce2Business_V01.Payloads
 {
-    public class GetProductsPayload
+    public class GetProductsPagePayload
     {
         public int? BrandID { get; set; }
         public int? TypeID { get; set; }

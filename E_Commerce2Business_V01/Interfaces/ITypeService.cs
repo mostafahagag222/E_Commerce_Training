@@ -1,4 +1,4 @@
-﻿using E_Commerce2Business_V01.Payloads;
+﻿using E_Commerce1DB_V01.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace E_Commerce2Business_V01.Interfaces
 {
-    public interface IBasketItemService
+    public interface ITypeService
     {
-        Task SyncBasketItemsAsync(string basketId, List<BasketItemPayload> productPayloads);
+        Task<List<GetTypesDTO>> GetTypesDTOAsync();
     }
 }

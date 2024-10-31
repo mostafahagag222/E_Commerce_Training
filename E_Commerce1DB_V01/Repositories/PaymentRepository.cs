@@ -24,7 +24,7 @@ namespace E_Commerce1DB_V01.Repositories
                 .Where(p => p.UniqueIdentifier == gUID)
                 .Select(p => new HandlePaymentPaymentDataDTO 
                 {
-                    CartId = p.CartId,
+                    BasketId = p.BasketId,
                     PaymentId = p.Id,
                     UserId = p.UserId,
                     Amount = p.Amount

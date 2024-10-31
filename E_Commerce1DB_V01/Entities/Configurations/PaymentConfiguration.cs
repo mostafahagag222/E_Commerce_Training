@@ -22,9 +22,9 @@ namespace E_Commerce1DB_V01.Entities.Configurations
                 .WithMany(o => o.Payments)
                 .HasForeignKey(p => p.OrderId);
             builder
-                .HasOne(p => p.Cart)
+                .HasOne(p => p.Basket)
                 .WithMany(c => c.Payments)
-                .HasForeignKey(p => p.CartId);
+                .HasForeignKey(p => p.BasketId);
         }
     }
 }

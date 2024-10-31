@@ -12,7 +12,7 @@ namespace E_Commerce1DB_V01
     {
         public int Id { get; set; }
         public int? UserId { get; set; }
-        public string CartId { get; set; }
+        public string BasketId { get; set; }
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
         public int TotalQuantity { get; set; }
@@ -23,7 +23,7 @@ namespace E_Commerce1DB_V01
 
         //navigational
         public virtual User User { get; set; } 
-        public virtual Cart Cart { get; set; }
+        public virtual Basket Basket { get; set; }
         public virtual List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
         public virtual List<Payment> Payments { get; set; } = new List<Payment>();
         public virtual ShippingMethod ShippingMethod { get; set; }

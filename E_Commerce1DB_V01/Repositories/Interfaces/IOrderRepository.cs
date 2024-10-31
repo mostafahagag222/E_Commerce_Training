@@ -12,6 +12,6 @@ namespace E_Commerce1DB_V01.Repositories
     {
         Task<List<GetAllOrdersDTO>> GetAllOrdersDTO(int userId);
         Task<OrderDTO> GetOrderDetailsById(int orderId);
-        Task<int> GetOrderId(string cartId);
+        Task<int> GetOrderId(string basketId);
     }
 }

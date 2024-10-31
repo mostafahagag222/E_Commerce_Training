@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace E_Commerce2Business_V01.Payloads.Validations
 {
-    public class GetProductsPayloadValidation : AbstractValidator<GetProductsPayload>
+    public class GetProductsPayloadValidation : AbstractValidator<GetProductsPagePayload>
     {
         public GetProductsPayloadValidation()
         {

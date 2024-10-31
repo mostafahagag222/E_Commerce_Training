@@ -20,41 +20,46 @@ namespace E_Commerce3APIs_V01.Controllers
         {
             _userService = userService;
         }
-
         [HttpPost("Register")]
-        public async Task<IActionResult> Register(RegistrationPayload payload)
+        public async Task<IActionResult> Register(RegistrationPayload registrationPayload)
         {
-            return Ok(await _userService.CreateAccount(payload));
+            var loginDTO = await _userService.CreateAccountAsync(registrationPayload);
+            return Ok(loginDTO);
         }
         [HttpGet("EmailExists")]
-        public async Task<bool> EmailExists(string email)
+        public async Task<IActionResult> CheckEmailExisting(string email)
         {
-            return await _userService.CheckEmailExisted(email);
+            var doesEmailExist = await _userService.CheckEmailExists(email);
+            return Ok(doesEmailExist);
         }
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginPayload payload)
+        public async Task<IActionResult> Login(LoginPayload logInPayload)
         {
-            return Ok(await _userService.Login(payload));
+            var loginDTO = await _userService.Login(logInPayload);
+            return Ok(loginDTO);
         }
         [Authorize]
         [HttpGet]
         public IActionResult GetDataFromToken ()
         {
             var token = ExtractToken();
-            return Ok(_userService.ExtractDataFromTokenAsync(token));
+            var loginDTO = _userService.GetLogInDTOFromTokenAsync(token);
+            return Ok(loginDTO);
         }
         [Authorize]
         [HttpGet("Address")]
-        public async Task<IActionResult> GetAddress()
+        public async Task<IActionResult> GetUserAddress()
         {
-            AddressDTO address = await _userService.GetAddress(ExtractIdFromToken());
+            var userId = ExtractIdFromToken();
+            AddressDTO address = await _userService.GetUserAddressAsync(userId);
             return Ok(address);
         }
         [Authorize]
         [HttpPut("Address")]
-        public async Task<IActionResult> AddAddress(AddressPayload payload)
+        public async Task<IActionResult> AddAddress(AddAddressPayload addAddressPayload)
         {
-            await _userService.AddAddressAsync(payload, ExtractIdFromToken());
+            var userId = ExtractIdFromToken();
+            await _userService.AddAddressAsync(addAddressPayload, userId);
             return NoContent();
         }
     }

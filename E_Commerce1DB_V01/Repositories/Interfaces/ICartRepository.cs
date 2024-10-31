@@ -10,15 +10,15 @@ using System.Threading.Tasks;
 
 namespace E_Commerce1DB_V01.Repositories
 {
-    public interface ICartRepository : IGenericRepository<Cart>
+    public interface IBasketRepository : IGenericRepository<Basket>
     {
         Task AddDeliveryMethodAsync(string id, int deliveryMethodId);
-        Task AddGuidToCart(string basketId, string gUID);
-        Task<bool> CheckExistenceByID(string id);
-        Task DeleteCartAsync(string id);
-        Task<GetPaymentAmountDTO> GetProductAndCartItemPrices(string cartId);
+        Task AddGuidToBasket(string basketId, string gUID);
+        Task<bool> DoesBasketExist(string id);
+        Task DeleteBasketAsync(string id);
+        Task<GetPaymentAmountDTO> GetProductAndBasketItemPrices(string basketId);
         Task<ShippingMethodIdAndSubtotalDTO> GetSMIdAndSubTotalAsync(string basketId);
-        Task<bool> UpdateCartAfterAddingCartItemAsync(string cartID, decimal itemPrice);
-        Task<bool> UpdateCartAfterRemovingCartItemAsync(string cartID, decimal itemPrice);
+        Task<bool> UpdateBasketAfterAddingBasketItemAsync(string basketID, decimal itemPrice);
+        Task<bool> UpdateBasketAfterRemovingBasketItemAsync(string basketID, decimal itemPrice);
     }
 }

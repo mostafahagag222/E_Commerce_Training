@@ -9,6 +9,6 @@ namespace E_Commerce1DB_V01.Repositories
 {
     public interface IOrderItemRepository : IGenericRepository<OrderItem>
     {
-        Task TransferCartItemsToOrderItemsAsync(string basketId);
+        Task TransferBasketItemsToOrderItemsAsync(string basketId);
     }
 }

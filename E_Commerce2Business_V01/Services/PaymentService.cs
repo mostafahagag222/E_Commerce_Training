@@ -39,7 +39,7 @@ namespace E_Commerce2Business_V01.Services
             var responseObject = JsonConvert.DeserializeObject<UPaymentsApiResponseDTO>(responseContent);
             await _unitOfWork.PaymentRepository.AddAsync(new Payment()
             {
-                CartId = basketId,
+                BasketId = basketId,
                 Amount = requestBodyAndAmount.paymentAmount,
                 CreatedAt = DateTime.Now,
                 PaymentRequestUrl = responseObject.Data.Link,
@@ -56,8 +56,8 @@ namespace E_Commerce2Business_V01.Services
                     }
                 }
             });
-            //add guid to cart
-            await _unitOfWork.CartRepository.AddGuidToCart(basketId,requestBodyAndAmount.requestBody.PaymentDataDTO.GUID);
+            //add guid to Basket
+            await _unitOfWork.BasketRepository.AddGuidToBasket(basketId,requestBodyAndAmount.requestBody.PaymentDataDTO.GUID);
             if (await _unitOfWork.SaveChangesAsync() < 1)
                 throw new InternalServerErrorException("couldn't create Payment");
             return new RedirectionUrlDTO()
@@ -65,19 +65,19 @@ namespace E_Commerce2Business_V01.Services
                 threeDSecureUrl = responseObject.Data.Link
             };
         }
-        private async Task<Decimal> GetPaymentAmount(string cartId)
+        private async Task<Decimal> GetPaymentAmount(string basketId)
         {
-            GetPaymentAmountDTO getPaymentAmountDTO = await _unitOfWork.CartRepository.GetProductAndCartItemPrices(cartId);
-            var items = getPaymentAmountDTO.CartItemsWithProductPrices;
+            GetPaymentAmountDTO getPaymentAmountDTO = await _unitOfWork.BasketRepository.GetProductAndBasketItemPrices(basketId);
+            var items = getPaymentAmountDTO.BasketItemsWithProductPrices;
             var ChangedPricesProductsIds = new List<int>();
             foreach (var item in items)
             {
-                if (item.ProductPrice != item.CartItemPrice)
+                if (item.ProductPrice != item.BasketItemPrice)
                     ChangedPricesProductsIds.Add(item.ProductId);
             }
             var number = ChangedPricesProductsIds.Count;
             if (number > 0)
-                throw new ConflictException($"{number} cart items prices changed");
+                throw new ConflictException($"{number} Basket items prices changed");
             return items.Sum(i => i.TotalPrice) + getPaymentAmountDTO.ShippingPrice;
         }
         private async Task<(PaymentRequestDTO requestBody, decimal paymentAmount)> CreateRequestBody(string basketId, int userId, HttpClient httpClient)

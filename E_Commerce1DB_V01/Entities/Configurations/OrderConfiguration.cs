@@ -18,9 +18,9 @@ namespace E_Commerce1DB_V01.Entities.Configurations
                 .WithMany(u => u.Orders)
                 .HasForeignKey(o => o.UserId);
             builder
-                .HasOne(o => o.Cart)
+                .HasOne(o => o.Basket)
                 .WithOne(c => c.Order)
-                .HasForeignKey<Order>(o => o.CartId)
+                .HasForeignKey<Order>(o => o.BasketId)
                 .OnDelete(DeleteBehavior.SetNull);
             builder
                 .HasOne(o => o.ShippingMethod)

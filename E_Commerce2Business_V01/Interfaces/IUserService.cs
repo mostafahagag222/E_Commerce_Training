@@ -12,11 +12,11 @@ namespace E_Commerce2Business_V01.Interfaces
 {
     public interface IUserService
     {
-        Task AddAddressAsync(AddressPayload payload, int userId);
-        Task<bool> CheckEmailExisted(string email);
-        Task<LoginDTO> CreateAccount(RegistrationPayload payload);
-        LoginDTO ExtractDataFromTokenAsync(string token);
-        Task<AddressDTO> GetAddress(int userId);
+        Task AddAddressAsync(AddAddressPayload payload, int userId);
+        Task<bool> CheckEmailExists(string email);
+        Task<LoginDTO> CreateAccountAsync(RegistrationPayload payload);
+        LoginDTO GetLogInDTOFromTokenAsync(string token);
+        Task<AddressDTO> GetUserAddressAsync(int userId);
         Task<LoginDTO> Login(LoginPayload payload);
     }
 }

@@ -33,8 +33,13 @@ namespace E_Commerce3APIs_V01
 
         private Task HandleExceptionAsync(HttpContext context, Exception ex)
         {
-            // Log the exception details
-            _logger.LogError(ex, "An unexpected error occurred.");
+            if (ex is BadRequestException badRequestEx)
+            {
+                _logger.LogError(badRequestEx, "An unexpected error occurred.");
+            }
+            else
+                // Log the exception details
+                _logger.LogError(ex, "An unexpected error occurred.");
             // Set the response code based on the exception type
             var responseCode = (int)HttpStatusCode.InternalServerError; // Default to 500
             switch (ex)
@@ -46,17 +51,17 @@ namespace E_Commerce3APIs_V01
                     responseCode = (int)HttpStatusCode.Conflict; // Change to 409
                     break;
                 case BadRequestException _:
-                    responseCode = (int)HttpStatusCode.BadRequest;
+                    {
+                        responseCode = (int)HttpStatusCode.BadRequest; // Change to 400
+                    }
                     break;
                 case InternalServerErrorException _:
-                    responseCode = (int)HttpStatusCode.InternalServerError;
+                    responseCode = (int)HttpStatusCode.InternalServerError; // Change to 500
                     break;
                 case UnauthorizedAccessException _:
-                    responseCode = (int)HttpStatusCode.Unauthorized;
+                    responseCode = (int)HttpStatusCode.Unauthorized; // Change to 401
                     break;
-                case Exception _:
-                    responseCode = (int)HttpStatusCode.InternalServerError;
-                    break;
+
             }
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = responseCode;

@@ -16,7 +16,7 @@ namespace E_Commerce1DB_V01.Repositories
             this.context = context;
         }
 
-        public async Task TransferCartItemsToOrderItemsAsync(string basketId)
+        public async Task TransferBasketItemsToOrderItemsAsync(string basketId)
         {
             /*
  * fetch basket items in basketitemdto{including price from product} 11

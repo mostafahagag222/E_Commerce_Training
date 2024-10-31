@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using E_Commerce1DB_V01.DTOs;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +12,17 @@ namespace E_Commerce1DB_V01.Repositories
     {
         private readonly ECPContext context;
 
-        public BrandRepository(ECPContext context):base(context)
+        public BrandRepository(ECPContext context) : base(context)
         {
             this.context = context;
         }
-        public async Task<bool> CheckExistenceByIDAsync(int? id)
-        {
-            return await context.Brands.AnyAsync(b => b.Id == id);
-        }
+        public async Task<bool> CheckExistenceByIDAsync(int? id) => 
+            await context.Brands
+            .AnyAsync(b => b.Id == id);
+        public async Task<List<GetBrandsDTO>> GetBrandsDTOAsync() => 
+            await context.Brands
+            .AsNoTracking()
+            .Select(b => new GetBrandsDTO() { Id = b.Id, Name = b.Name })
+            .ToListAsync();
     }
 }

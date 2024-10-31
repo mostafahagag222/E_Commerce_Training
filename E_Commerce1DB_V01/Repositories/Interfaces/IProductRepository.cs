@@ -12,10 +12,7 @@ namespace E_Commerce1DB_V01.Entities
 {
     public interface IProductRepository : IGenericRepository<Product>
     {
-        Task<List<GetBrandsDTO>> GetBrandsAsync();
-        Task<List<ProductDTO>> GetProductsDetailsForCartItems(string cartId);
-        Task<PaginationDTO<GetProductsDTO>> GetProductsPage(GetProductsPayload payload);
-        Task<List<GetTypesDTO>> GetTypesAsync();
+        Task<PaginationDTO<GetProductsDTO>> GetProductsPageAsync(GetProductsPagePayload payload);
         Task<int> GetUnitsInStockForOneProductAsync(int id);
     }
 }

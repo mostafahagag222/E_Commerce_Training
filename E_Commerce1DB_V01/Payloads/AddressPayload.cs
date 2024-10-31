@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace E_Commerce1DB_V01.Payloads
 {
-    public class AddressPayload
+    public class AddAddressPayload
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

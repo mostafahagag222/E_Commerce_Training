@@ -13,8 +13,8 @@ namespace E_Commerce1DB_V01
         private readonly Lazy<IProductRepository> _productRepository;
         private readonly Lazy<IBrandRepository> _brandRepository;
         private readonly Lazy<ITypeRepository> _typeRepository;
-        private readonly Lazy<ICartRepository> _cartRepository;
-        private readonly Lazy<ICartItemRepository> _cartItemRepository;
+        private readonly Lazy<IBasketRepository> _basketRepository;
+        private readonly Lazy<IBasketItemRepository> _basketItemRepository;
         private readonly Lazy<IShippingMethodRepository> _shippingMethodRepository;
         private readonly Lazy<IOrderRepository> _orderRepository;
         private readonly Lazy<IOrderItemRepository> _orderItemRepository;
@@ -27,8 +27,8 @@ namespace E_Commerce1DB_V01
                           Lazy<IProductRepository> productRepository,
                           Lazy<IBrandRepository> brandRepository,
                           Lazy<ITypeRepository> typeRepository,
-                          Lazy<ICartRepository> cartRepository,
-                          Lazy<ICartItemRepository> cartItemRepository,
+                          Lazy<IBasketRepository> basketRepository,
+                          Lazy<IBasketItemRepository> basketItemRepository,
                           Lazy<IShippingMethodRepository> shippingMethodRepository,
                           Lazy<IOrderItemRepository> orderItemRepository,
                           Lazy<IOrderRepository> orderRepository,
@@ -40,8 +40,8 @@ namespace E_Commerce1DB_V01
             _productRepository = productRepository;
             _brandRepository = brandRepository;
             _typeRepository = typeRepository;
-            _cartRepository = cartRepository;
-            _cartItemRepository = cartItemRepository;
+            _basketRepository = basketRepository;
+            _basketItemRepository = basketItemRepository;
             _shippingMethodRepository = shippingMethodRepository;
             _orderItemRepository = orderItemRepository;
             _orderRepository = orderRepository;
@@ -52,8 +52,8 @@ namespace E_Commerce1DB_V01
         public IProductRepository ProductRepository => _productRepository.Value;
         public IBrandRepository BrandRepository => _brandRepository.Value;
         public ITypeRepository TypeRepository => _typeRepository.Value;
-        public ICartRepository CartRepository => _cartRepository.Value;
-        public ICartItemRepository CartItemRepository => _cartItemRepository.Value;
+        public IBasketRepository BasketRepository => _basketRepository.Value;
+        public IBasketItemRepository BasketItemRepository => _basketItemRepository.Value;
         public IOrderRepository OrderRepository => _orderRepository.Value;
         public IOrderItemRepository OrderItemRepository => _orderItemRepository.Value;
         public IShippingMethodRepository ShippingMethodRepository => _shippingMethodRepository.Value;

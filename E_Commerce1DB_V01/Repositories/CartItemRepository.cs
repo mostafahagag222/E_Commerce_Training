@@ -10,67 +10,67 @@ using System.Threading.Tasks;
 
 namespace E_Commerce1DB_V01.Repositories
 {
-    public class CartItemRepository : GenericRepository<CartItem>, ICartItemRepository
+    public class BasketItemRepository : GenericRepository<BasketItem>, IBasketItemRepository
     {
         private readonly ECPContext context;
-        public CartItemRepository(ECPContext context) : base(context)
+        public BasketItemRepository(ECPContext context) : base(context)
         {
             this.context = context;
         }
 
-        public void DeleteRange(List<CartItem> cartItemsToRemove)
+        public void DeleteRange(List<BasketItem> basketItemsToRemove)
         {
-            context.RemoveRange(cartItemsToRemove);
+            context.RemoveRange(basketItemsToRemove);
         }
 
-        public async Task DeleteRangeByCartId(string id)
+        public async Task DeleteRangeByBasketId(string id)
         {
-            var cartItems = await context.CartItems.Where(ci => ci.CartID == id).ToListAsync();
-            context.CartItems.RemoveRange(cartItems);
+            var basketItems = await context.BasketItems.Where(ci => ci.BasketID == id).ToListAsync();
+            context.BasketItems.RemoveRange(basketItems);
         }
 
-        public async Task<CartItem> GetCartItemByCartIdProductID(string cartId, int productId)
+        public async Task<BasketItem> GetBasketItemByBasketIdProductID(string basketId, int productId)
         {
-            return await (from ci in context.CartItems
-                          where ci.CartID == cartId
+            return await (from ci in context.BasketItems
+                          where ci.BasketID == basketId
                           && ci.ProductID == productId
                           select ci).FirstOrDefaultAsync();
         }
 
-        public async Task<QuantityUnitsInStockDTO> GetCartItemQuantityAndUnitInStockAsync(string cartId, int cartItemId)
+        public async Task<QuantityUnitsInStockDTO> GetBasketItemQuantityAndUnitInStockAsync(string basketId, int basketItemId)
         {
 
-            return await (from ci in context.CartItems
-                          where ci.CartID == cartId
-                          && ci.Id == cartItemId
+            return await (from ci in context.BasketItems
+                          where ci.BasketID == basketId
+                          && ci.Id == basketItemId
                           join p in context.Products
                           on ci.ProductID equals p.Id
                           select new QuantityUnitsInStockDTO()
                           {
-                              CartItemQuantity = ci.Quantity,
+                              BasketItemQuantity = ci.Quantity,
                               ProdutcStockQuantity = p.UnitsInStock
                           }).FirstOrDefaultAsync();
         }
 
-        public async Task<List<CartItem>> GetCartItemsFroSpecificCart(string cartId)
+        public async Task<List<BasketItem>> GetBasketItemsFroSpecificBasket(string basketId)
         {
-            return await (from ci in context.CartItems
-                          where ci.CartID == cartId
+            return await (from ci in context.BasketItems
+                          where ci.BasketID == basketId
                           select ci).ToListAsync();
         }
 
-        public async Task<BasketDTO> GetBasketDTOAsync(string cartID)
+        public async Task<BasketDTO> GetBasketDTOAsync(string basketID)
         {
-            //        var requiredBasket = await context.Carts
-            //.Where(c => c.Id == cartID)
+            //        var requiredBasket = await context.Baskets
+            //.Where(c => c.Id == basketID)
             //.Include(c => c.ShippingMethod)
-            //.Include(c => c.CartItems)
+            //.Include(c => c.BasketItems)
             //.ThenInclude(ci => ci.Product)
             //.FirstOrDefaultAsync();
 
             //        if (requiredBasket == null)
             //        {
-            //            throw new Exception("Cart not found.");
+            //            throw new Exception("Basket not found.");
             //        }
 
             //        if (requiredBasket.ShippingMethod == null)
@@ -78,14 +78,14 @@ namespace E_Commerce1DB_V01.Repositories
             //            throw new Exception("Shipping method is null.");
             //        }
 
-            //        if (requiredBasket.CartItems.Any(ci => ci.Product == null))
+            //        if (requiredBasket.BasketItems.Any(ci => ci.Product == null))
             //        {
-            //            throw new Exception("One or more cart items have a null product.");
+            //            throw new Exception("One or more Basket items have a null product.");
             //        }
 
             #region MyRegion
-            //return await (from ci in context.CartItems
-            //              where ci.CartID == cartID
+            //return await (from ci in context.BasketItems
+            //              where ci.BasketID == basketID
             //              join p in context.Products
             //              on ci.ProductID equals p.Id
             //              select new ProductDTO()
@@ -101,9 +101,9 @@ namespace E_Commerce1DB_V01.Repositories
             //                  Quantity = ci.Quantity
             //              }).ToListAsync(); 
             #endregion
-            var RequiredBasket = context.Carts
-                .Where(c => c.Id == cartID)
-                .Include(c => c.CartItems)
+            var RequiredBasket = context.Baskets
+                .Where(c => c.Id == basketID)
+                .Include(c => c.BasketItems)
                 .ThenInclude(ci => ci.Product);
 
             var RequiredBasket1 = await RequiredBasket
@@ -112,7 +112,7 @@ namespace E_Commerce1DB_V01.Repositories
                     Id = c.Id,
                     DeliveryMethodId = c.ShippingMethodID != null? int.Parse(c.ShippingMethodID) : 0,
                     ShippingPrice =c.ShippingMethod!=null ? c.ShippingMethod.Price :0 ,
-                    Items = c.CartItems.Select(c => new ProductDTO()
+                    Items = c.BasketItems.Select(c => new ProductDTO()
                     {
                         Id = c.Product.Id,
                         Price = c.Product.Price,
@@ -127,10 +127,10 @@ namespace E_Commerce1DB_V01.Repositories
                 }).FirstOrDefaultAsync();
             return RequiredBasket1;
         }
-        public async Task<List<CreateOrderItemDTO>> GetCartItemsDTOAsync(string basketId)
+        public async Task<List<CreateOrderItemDTO>> GetBasketItemsDTOAsync(string basketId)
         {
-            var items = await (from ci in context.CartItems
-                               where ci.CartID == basketId
+            var items = await (from ci in context.BasketItems
+                               where ci.BasketID == basketId
                                select new CreateOrderItemDTO()
                                {
                                    Product = ci.Product,

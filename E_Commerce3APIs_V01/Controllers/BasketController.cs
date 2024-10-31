@@ -10,28 +10,24 @@ namespace E_Commerce3APIs_V01.Controllers
     [ApiController]
     public class BasketController : ControllerBase
     {
-        private readonly ICartServices _cartServices;
+        private readonly IBasketService _basketService;
 
-        public BasketController(ICartServices cartServices)
+        public BasketController(IBasketService basketService)
         {
-            _cartServices = cartServices;
+            _basketService = basketService;
         }
-
         [HttpPost]
-        public async Task<IActionResult> AddToCart(AddToBasketPayload payload)
-        {
-            return Ok(await _cartServices.UpdateCartItems(payload));
-        }
+        public async Task<IActionResult> UpdateBasket(UpdateBasketPayload payload) => Ok(await _basketService.UpdateBasketAsync(payload));
         [HttpDelete]
-        public async Task<IActionResult> DeleteBasket (string id)
+        public async Task<IActionResult> DeleteBasket(string id)
         {
-            await _cartServices.DeleteCartAsync(id);
+            await _basketService.DeleteBasketAsync(id);
             return NoContent();
         }
         [HttpGet]
-        public async Task<IActionResult> GetBasketDetails (string id)
+        public async Task<IActionResult> GetBasketDetails(string id)
         {
-            return Ok(await _cartServices.GetBasketDetailsAsync(id));
+            return Ok(await _basketService.GetBasketDetailsAsync(id));
         }
     }
 }

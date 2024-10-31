@@ -10,43 +10,43 @@ using System.Threading.Tasks;
 
 namespace E_Commerce1DB_V01.Repositories
 {
-    public class CartRepository : GenericRepository<Cart>, ICartRepository
+    public class BasketRepository : GenericRepository<Basket>, IBasketRepository
     {
         private readonly ECPContext context;
 
-        public CartRepository(ECPContext context) : base(context)
+        public BasketRepository(ECPContext context) : base(context)
         {
             this.context = context;
         }
         public async Task AddDeliveryMethodAsync(string id, int deliveryMethodId)
         {
-            await context.Carts.Where(c => c.Id == id).ExecuteUpdateAsync(c => c.SetProperty(c => c.ShippingMethodID ,deliveryMethodId.ToString()));
+            await context.Baskets.Where(c => c.Id == id).ExecuteUpdateAsync(c => c.SetProperty(c => c.ShippingMethodID ,deliveryMethodId.ToString()));
         }
-        public async Task AddGuidToCart(string basketId, string gUID)
+        public async Task AddGuidToBasket(string basketId, string gUID)
         {
-            await context.Carts.Where(c => c.Id == basketId)
+            await context.Baskets.Where(c => c.Id == basketId)
                 .ExecuteUpdateAsync(c => c
                 .SetProperty(c => c.GUID , gUID));
         }
-        public async Task<bool> CheckExistenceByID(string id)
+        public async Task<bool> DoesBasketExist(string id)
         {
-            return await context.Carts.AnyAsync(c => c.Id == id);
+            return await context.Baskets.AnyAsync(c => c.Id == id);
         }
-        public async Task DeleteCartAsync(string id)
+        public async Task DeleteBasketAsync(string id)
         {
-            var cart = await context.Carts.FirstOrDefaultAsync(c => c.Id == id);
-            context.Remove(cart);
+            var Basket = await context.Baskets.FirstOrDefaultAsync(c => c.Id == id);
+            context.Remove(Basket);
         }
-        public async Task<GetPaymentAmountDTO> GetProductAndCartItemPrices(string cartId)
+        public async Task<GetPaymentAmountDTO> GetProductAndBasketItemPrices(string basketId)
         {
-            var result = await (from c in context.Carts
-                                where c.Id == cartId
+            var result = await (from c in context.Baskets
+                                where c.Id == basketId
                                 select new GetPaymentAmountDTO
                                 {
                                     ShippingPrice = c.ShippingMethod.Price,
-                                    CartItemsWithProductPrices = c.CartItems.Select(ci=>new GetItemPriceDetailsDTO()
+                                    BasketItemsWithProductPrices = c.BasketItems.Select(ci=>new GetItemPriceDetailsDTO()
                                     {
-                                        CartItemPrice = ci.Price,
+                                        BasketItemPrice = ci.Price,
                                         ProductId = ci.ProductID,
                                         ProductPrice = ci.Product.Price,
                                         Quantity = ci.Quantity,
@@ -58,32 +58,32 @@ namespace E_Commerce1DB_V01.Repositories
         }
         public async Task<ShippingMethodIdAndSubtotalDTO> GetSMIdAndSubTotalAsync(string basketId)
         {
-            var result = await (from c in context.Carts
+            var result = await (from c in context.Baskets
                                 where c.Id == basketId
                                 select new ShippingMethodIdAndSubtotalDTO()
                                 {
                                     ShippingMethodId = c.ShippingMethodID,
-                                    Subtotal = c.CartItems.Sum(ci => ci.Quantity * ci.Quantity)
+                                    Subtotal = c.BasketItems.Sum(ci => ci.Quantity * ci.Quantity)
                                 }).FirstOrDefaultAsync();
             return result;
         }
 
-        public async Task<bool> UpdateCartAfterAddingCartItemAsync(string cartID, decimal itemPrice)
+        public async Task<bool> UpdateBasketAfterAddingBasketItemAsync(string basketID, decimal itemPrice)
         {
             return await context
-                .Carts
-                .Where(c => c.Id == cartID)
+                .Baskets
+                .Where(c => c.Id == basketID)
                 .ExecuteUpdateAsync(c => c
                 .SetProperty(c => c.UpdatedDate, DateTime.Now)
                 .SetProperty(c => c.TotalPrice, c => c.TotalPrice + itemPrice)
                 .SetProperty(c=>c.TotalQuantity, c=> c.TotalQuantity+1)
                 ) > 0;
         }
-        public async Task<bool> UpdateCartAfterRemovingCartItemAsync(string cartID, decimal itemPrice)
+        public async Task<bool> UpdateBasketAfterRemovingBasketItemAsync(string basketID, decimal itemPrice)
         {
             return await context
-                .Carts
-                .Where(c => c.Id == cartID)
+                .Baskets
+                .Where(c => c.Id == basketID)
                 .ExecuteUpdateAsync(c => c
                 .SetProperty(c => c.UpdatedDate, DateTime.Now)
                 .SetProperty(c => c.TotalPrice, c => c.TotalPrice - itemPrice)

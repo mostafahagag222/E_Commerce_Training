@@ -1,6 +1,6 @@
 ﻿namespace E_Commerce2Business_V01.Payloads
 {
-    public class ProductPayload
+    public class BasketItemPayload
     {
         public int Id { get; set; }
         public string Name { get; set; }

@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace E_Commerce1DB_V01
 {
-    public class CartItem
+    public class BasketItem
     {
         public int Id { get; set; }
-        public string CartID { get; set; }
+        public string BasketID { get; set; }
         public int ProductID { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
         public decimal TotalPrice => Price * Quantity;
 
         //navigational
-        public virtual Cart Cart { get; set; }
+        public virtual Basket Basket { get; set; }
         public virtual Product Product { get; set; }
     }
 }

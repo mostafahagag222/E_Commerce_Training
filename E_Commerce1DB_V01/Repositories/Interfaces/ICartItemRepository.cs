@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace E_Commerce1DB_V01.Repositories
 {
-    public interface ICartItemRepository : IGenericRepository<CartItem>
+    public interface IBasketItemRepository : IGenericRepository<BasketItem>
     {
-        void DeleteRange(List<CartItem> cartItemsToRemove);
-        Task DeleteRangeByCartId(string id);
-        Task<CartItem> GetCartItemByCartIdProductID(string cartId, int producId);
-        Task<QuantityUnitsInStockDTO> GetCartItemQuantityAndUnitInStockAsync(string CartId, int cartItemId);
-        Task<List<CartItem>> GetCartItemsFroSpecificCart(string cartId);
-        Task<BasketDTO> GetBasketDTOAsync(string cartID);
-        Task<List<CreateOrderItemDTO>> GetCartItemsDTOAsync(string basketId);
+        void DeleteRange(List<BasketItem> basketItemsToRemove);
+        Task DeleteRangeByBasketId(string id);
+        Task<BasketItem> GetBasketItemByBasketIdProductID(string basketId, int producId);
+        Task<QuantityUnitsInStockDTO> GetBasketItemQuantityAndUnitInStockAsync(string BasketId, int basketItemId);
+        Task<List<BasketItem>> GetBasketItemsFroSpecificBasket(string basketId);
+        Task<BasketDTO> GetBasketDTOAsync(string basketID);
+        Task<List<CreateOrderItemDTO>> GetBasketItemsDTOAsync(string basketId);
     }
 }

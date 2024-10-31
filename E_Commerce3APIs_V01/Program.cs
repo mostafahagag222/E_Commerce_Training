@@ -1,5 +1,9 @@
 
+using E_Commerce2Business_V01.Interfaces;
+using E_Commerce2Business_V01.Services;
+using E_Commerce3APIs_V01.Controllers;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -19,10 +23,8 @@ namespace E_Commerce3APIs_V01
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -32,7 +34,7 @@ namespace E_Commerce3APIs_V01
 
             app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseCors("CorsPolicy");
 
@@ -40,8 +42,9 @@ namespace E_Commerce3APIs_V01
 
             app.UseAuthorization();
 
-
             app.MapControllers();
+
+            app.MapEndpoints();
 
             app.Run();
         }

@@ -4,6 +4,8 @@ using E_Commerce1DB_V01.Payloads;
 using E_Commerce1DB_V01.Repositories;
 using E_Commerce2Business_V01.DTOs;
 using E_Commerce2Business_V01.Interfaces;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualBasic;
 using System.IdentityModel.Tokens.Jwt;
@@ -16,74 +18,73 @@ namespace E_Commerce2Business_V01.Services
     public class UserService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IConfiguration _configuration;
+        private readonly ILogger<UserService> _logger;
 
-        public UserService(IUnitOfWork unitOfWork)
+        public UserService(IUnitOfWork unitOfWork, IConfiguration configuration, ILogger<UserService> logger)
         {
             _unitOfWork = unitOfWork;
+            _configuration = configuration;
+            _logger = logger;
         }
-        public async Task<LoginDTO> CreateAccount(RegistrationPayload payload)
+        public async Task<LoginDTO> CreateAccountAsync(RegistrationPayload registrationPayload)
         {
-            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(payload.Password);
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(registrationPayload.Password);
             var user = new User()
             {
-                Email = payload.Email.ToLower(),
-                Name = payload.DisplayName,
+                Email = registrationPayload.Email.ToLower(),
+                Name = registrationPayload.DisplayName,
                 HashedPassword = hashedPassword
-
             };
-            await _unitOfWork.UserRepository.AddAsync(user);
-            var r = await _unitOfWork.SaveChangesAsync();
-            if (r > 0)
-            {
-                var DTO = new LoginDTO()
-                {
-                    DisplayName = payload.DisplayName,
-                    Email = payload.Email,
-                    Token = GenerateJWTToken(null)
-                };
-                return DTO;
-            }
-            else
-                throw new InternalServerErrorException("something went Wrong Couldn't create account");
+            var createdUser = await CreateUserAsync(user);
+            var logInDTO = CreateLoginDTO(createdUser);
+            _logger.LogInformation($"Account With ID {createdUser.Id} was successfully created for Email : {createdUser.Email}  at : {DateTime.Now}");
+            return logInDTO;
         }
-        public async Task<LoginDTO> Login(LoginPayload payload)
+        public async Task<LoginDTO> Login(LoginPayload loginPayload)
         {
-            var user = await _unitOfWork.UserRepository.GetByEmailAsync(payload.Email);
+            var user = await _unitOfWork.UserRepository.GetUserByEmailAsync(loginPayload.Email);
             if (user == null)
                 throw new BadRequestException("user not found");
-            if (!BCrypt.Net.BCrypt.Verify(payload.Password, user.HashedPassword))
-                throw new BadRequestException("invalid password");
-            List<Claim> claims = new List<Claim>();
-            claims.Add(new Claim("name", user.Name));
-            claims.Add(new Claim("email", user.Name));
-            claims.Add(new Claim("id", user.Id.ToString()));
-            return new LoginDTO()
-            {
-                DisplayName = user.Name,
-                Email = user.Email,
-                Token = GenerateJWTToken(claims)
-            };
+            if (!BCrypt.Net.BCrypt.Verify(loginPayload.Password, user.HashedPassword))
+                throw new BadRequestException("invalid password", user.Id);
+            LoginDTO logInDTO = CreateLoginDTO(user);
+            _logger.LogInformation($"Successful Login for user with id : {user.Id} at : {DateTime.Now}");
+            return logInDTO;
         }
-        public async Task<bool> CheckEmailExisted(string email)
+        public async Task<bool> CheckEmailExists(string email)
         {
-            return await _unitOfWork.UserRepository.CheckEmailExistedAsync(email);
+            var doesEmailExist = await _unitOfWork.UserRepository.CheckEmailExistedAsync(email);
+            return doesEmailExist;
         }
-        public LoginDTO ExtractDataFromTokenAsync(string token)
+        public LoginDTO GetLogInDTOFromTokenAsync(string token)
         {
-            if (!IsTokenValidAndNotExpired(token))
-                throw new UnAuthorizedException("Token Is invalid or expired");
             var handler = new JwtSecurityTokenHandler();
             var jsonToken = handler.ReadToken(token) as JwtSecurityToken;
-            return new LoginDTO()
+            var logInDTO = new LoginDTO()
             {
                 DisplayName = jsonToken.Claims.FirstOrDefault(c => c.Type == "name").Value,
                 Email = jsonToken.Claims.FirstOrDefault(c => c.Type == "email").Value,
                 Token = token
             };
+            return logInDTO;
+        }
+        public async Task<AddressDTO> GetUserAddressAsync(int userId)
+        {
+            var userAddressDTO = await _unitOfWork.UserRepository.GetUserAddress(userId);
+            return userAddressDTO;
+        }
+        public async Task AddAddressAsync(AddAddressPayload payload, int userId)
+        {
+            await _unitOfWork.UserRepository.AddAddressAsync(payload, userId);
+            var saveChanges = await _unitOfWork.SaveChangesAsync();
+            if (saveChanges < 1)
+                throw new InternalServerErrorException("couldn't add Address");
         }
         private string GenerateJWTToken(List<Claim> c)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("A7A123A7tin2223A7a3jsadfbfsdhbjidsakjdsankasdjbkjafbfakjsbjkasdbjklasdfbkajskd"));
+            var secretKey = _configuration["JwtSettings:SecretKey"];
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var token = new JwtSecurityToken
                 (
@@ -93,50 +94,27 @@ namespace E_Commerce2Business_V01.Services
                 );
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-        public bool IsTokenValidAndNotExpired(string token)
+        private async Task<User> CreateUserAsync(User user)
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes("A7A123A7tin2223A7a3jsadfbfsdhbjidsakjdsankasdjbkjafbfakjsbjkasdbjklasdfbkajskd");
-
-            try
-            {
-                tokenHandler.ValidateToken(token, new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ValidIssuer = "yourIssuer",
-                    ValidAudience = "yourAudience",
-                    ValidateLifetime = true, // Check for expiration
-                    ClockSkew = TimeSpan.Zero // Optional: reduce clock skew if needed
-                }, out _);
-
-                // If no exception was thrown, the token is valid and not expired
-                return true;
-            }
-            catch (SecurityTokenExpiredException)
-            {
-                // Token is expired
-                return false;
-            }
-            catch (Exception)
-            {
-                // Token is invalid (e.g., signature mismatch, wrong issuer/audience)
-                return false;
-            }
+            await _unitOfWork.UserRepository.AddAsync(user);
+            var saveChanges = await _unitOfWork.SaveChangesAsync();
+            if (saveChanges < 0)
+                throw new InternalServerErrorException("something went Wrong Couldn't create account");
+            return user;
         }
-
-        public Task<AddressDTO> GetAddress(int userId)
+        private LoginDTO CreateLoginDTO(User user)
         {
-            return _unitOfWork.UserRepository.GetUserAddress(userId);
-        }
-
-        public async Task AddAddressAsync(AddressPayload payload, int userId)
-        {
-            await _unitOfWork.UserRepository.AddAddressAsync(payload, userId);
-            if (await _unitOfWork.SaveChangesAsync() < 1)
-                throw new InternalServerErrorException("couldn't add Address");
+            List<Claim> claims = new List<Claim>();
+            claims.Add(new Claim("name", user.Name));
+            claims.Add(new Claim("email", user.Email));
+            claims.Add(new Claim("id", user.Id.ToString()));
+            var loginDTO = new LoginDTO()
+            {
+                DisplayName = user.Name,
+                Email = user.Email,
+                Token = GenerateJWTToken(claims)
+            };
+            return loginDTO;
         }
     }
 }

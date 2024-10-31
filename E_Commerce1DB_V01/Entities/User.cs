@@ -17,7 +17,7 @@ namespace E_Commerce1DB_V01.Repositories
         public Role Role { get; set; } = Role.User;
 
         //navigational
-        public virtual List<Cart> Carts { get; set; } = new List<Cart>();
+        public virtual List<Basket> Baskets { get; set; } = new List<Basket>();
         public virtual List<Address> Addresses { get; set; } = new List<Address>();
         public virtual List<Order> Orders { get; set; } = new List<Order>();
         public virtual List<Payment> Payments { get; set; } = new List<Payment>();

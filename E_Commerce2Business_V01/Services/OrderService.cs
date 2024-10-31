@@ -58,11 +58,11 @@ namespace E_Commerce2Business_V01.Services
                     PaymentId = payment.PaymentId,
                     PaymentResponse = responseToJson
                 }); // no save changes
-                await CreateOrderAsync(payment.CartId, (int)payment.UserId, payment.Amount);
+                await CreateOrderAsync(payment.BasketId, (int)payment.UserId, payment.Amount);
                 await _unitOfWork.SaveChangesAsync();///////-----------------------------------
-                int orderId = await _unitOfWork.OrderRepository.GetOrderId(payment.CartId);
+                int orderId = await _unitOfWork.OrderRepository.GetOrderId(payment.BasketId);
                 await _unitOfWork.PaymentRepository.UpdateOrderId(orderId,response.GUID); // no save changes
-                await _unitOfWork.CartRepository.DeleteCartAsync(payment.CartId);
+                await _unitOfWork.BasketRepository.DeleteBasketAsync(payment.BasketId);
                 var saveChanges = await _unitOfWork.SaveChangesAsync();
                 if (saveChanges < 1)
                     throw new InternalServerErrorException("something went wrong during handling payment");
@@ -71,13 +71,13 @@ namespace E_Commerce2Business_V01.Services
         private async Task CreateOrderAsync(string basketId, int userID, decimal amount)
         {
             /*
-             * GET CART ITEMS DATA
-             * MAP CART ITEMS DTOS TO ORDER ITEMS
+             * GET Basket ITEMS DATA
+             * MAP Basket ITEMS DTOS TO ORDER ITEMS
              * CREATE NEW ORDER WITH ORDER ITEMS INCLUDED
              * ADD ORDER ITEM WITH EF
              * UPDATE FETCHED PRODUCTS STOCK
              */
-            var items = await _unitOfWork.CartItemRepository.GetCartItemsDTOAsync(basketId); // 2
+            var items = await _unitOfWork.BasketItemRepository.GetBasketItemsDTOAsync(basketId); // 2
             var OrderItems = items.Select(i => new OrderItem()
             {
                 Price = i.Price,
@@ -85,12 +85,12 @@ namespace E_Commerce2Business_V01.Services
                 ProductId = i.Product.Id,
                 TotalPrice = i.TotalPrice
             }).ToList();
-            ShippingMethodIdAndSubtotalDTO shippingMethodIdAndSubtotalDTO = await _unitOfWork.CartRepository.GetSMIdAndSubTotalAsync(basketId);
+            ShippingMethodIdAndSubtotalDTO shippingMethodIdAndSubtotalDTO = await _unitOfWork.BasketRepository.GetSMIdAndSubTotalAsync(basketId);
             var order = new Order()
             {
                 UserId = userID,
                 OrderItems = OrderItems,
-                CartId = basketId,
+                BasketId = basketId,
                 Created = DateTime.Now,
                 Updated = DateTime.Now,
                 TotalQuantity = OrderItems.Sum(o => o.Quantity),
@@ -104,10 +104,10 @@ namespace E_Commerce2Business_V01.Services
         }
         private void UpdateProductsStockAsync(List<CreateOrderItemDTO> items)
         {
-            foreach (var cartItem in items)
+            foreach (var basketItem in items)
             {
-                cartItem.Product.UnitsInStock -= cartItem.Quantity;
-                _unitOfWork.ProductRepository.UpdateAsync(cartItem.Product);
+                basketItem.Product.UnitsInStock -= basketItem.Quantity;
+                _unitOfWork.ProductRepository.UpdateAsync(basketItem.Product);
             }
         }
     }

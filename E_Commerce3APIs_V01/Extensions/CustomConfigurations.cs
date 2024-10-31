@@ -15,6 +15,7 @@ using System;
 using E_Commerce1DB_V01.Entities;
 using E_Commerce2Business_V01.Payloads;
 using E_Commerce1DB_V01.Repositories.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace E_Commerce3APIs_V01
 {
@@ -28,7 +29,7 @@ namespace E_Commerce3APIs_V01
             //add fluent validation
             services.AddFluentValidationAutoValidation();
             services.AddValidatorsFromAssemblyContaining<RegistrationPayload>();
-            services.AddValidatorsFromAssemblyContaining<GetProductsPayload>();
+            services.AddValidatorsFromAssemblyContaining<GetProductsPagePayload>();
             services.AddControllers(o => { o.Filters.Add<ValidationFilter>(); });
 
             //repositories DI
@@ -40,10 +41,10 @@ namespace E_Commerce3APIs_V01
             services.AddScoped<Lazy<IBrandRepository>>(provider => new Lazy<IBrandRepository>(() => provider.GetRequiredService<IBrandRepository>()));
             services.AddScoped<ITypeRepository, TypeRepository>();
             services.AddScoped<Lazy<ITypeRepository>>(provider => new Lazy<ITypeRepository>(() => provider.GetRequiredService<ITypeRepository>()));
-            services.AddScoped<ICartItemRepository, CartItemRepository>();
-            services.AddScoped<Lazy<ICartItemRepository>>(provider => new Lazy<ICartItemRepository>(() => provider.GetRequiredService<ICartItemRepository>()));
-            services.AddScoped<ICartRepository, CartRepository>();
-            services.AddScoped<Lazy<ICartRepository>>(provider => new Lazy<ICartRepository>(() => provider.GetRequiredService<ICartRepository>()));
+            services.AddScoped<IBasketItemRepository, BasketItemRepository>();
+            services.AddScoped<Lazy<IBasketItemRepository>>(provider => new Lazy<IBasketItemRepository>(() => provider.GetRequiredService<IBasketItemRepository>()));
+            services.AddScoped<IBasketRepository, BasketRepository>();
+            services.AddScoped<Lazy<IBasketRepository>>(provider => new Lazy<IBasketRepository>(() => provider.GetRequiredService<IBasketRepository>()));
             services.AddScoped<IShippingMethodRepository, ShippingMethodRepository>();
             services.AddScoped<Lazy<IShippingMethodRepository>>(provider => new Lazy<IShippingMethodRepository>(() => provider.GetRequiredService<IShippingMethodRepository>()));
             services.AddScoped<IOrderItemRepository, OrderItemRepository>();
@@ -61,11 +62,13 @@ namespace E_Commerce3APIs_V01
             //Services DI
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IProductService, ProductService>();
-            services.AddScoped<ICartServices, CartServices>();
-            services.AddScoped<ICartItemService, CartItemService>();
+            services.AddScoped<IBasketService, BasketService>();
+            services.AddScoped<IBasketItemService, BasketItemService>();
             services.AddScoped<IShippingMethodService, ShippingMethodService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<ITypeService, TypeService>();
+            services.AddScoped<IBrandService, BrandService>();
 
             //payment request configurations
 
@@ -78,9 +81,6 @@ namespace E_Commerce3APIs_V01
                 });
             });
 
-
-
-
             //add Authorization JWT
             services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -92,9 +92,12 @@ namespace E_Commerce3APIs_V01
                         ValidateAudience = false,
                         ValidateIssuer = false,
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("A7A123A7tin2223A7a3jsadfbfsdhbjidsakjdsankasdjbkjafbfakjsbjkasdbjklasdfbkajskd"))
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:SecretKey"]))
                     };
                 });
+
+
+
 
             return services;
         }

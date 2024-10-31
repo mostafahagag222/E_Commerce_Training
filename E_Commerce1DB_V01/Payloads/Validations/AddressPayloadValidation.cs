@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace E_Commerce1DB_V01.Payloads.Validations
 {
-    public class AddressPayloadValidation : AbstractValidator<AddressPayload>
+    public class AddressPayloadValidation : AbstractValidator<AddAddressPayload>
     {
         public AddressPayloadValidation()
         {

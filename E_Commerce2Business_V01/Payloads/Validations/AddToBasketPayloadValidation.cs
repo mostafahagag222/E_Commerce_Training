@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace E_Commerce2Business_V01.Payloads.Validations
 {
-    public class AddToBasketPayloadValidation : AbstractValidator<AddToBasketPayload>
+    public class AddToBasketPayloadValidation : AbstractValidator<UpdateBasketPayload>
     {
         public AddToBasketPayloadValidation()
         {
