@@ -1,10 +1,9 @@
-﻿using Ardalis.GuardClauses;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
-using System;
-using System.Diagnostics.CodeAnalysis;
 
-namespace E_Commerce3APIs_V01;
+namespace E_Commerce3APIs_V01.EnpointsHelper;
 
 public static class IEndpointRouteBuilderExtensions
 {

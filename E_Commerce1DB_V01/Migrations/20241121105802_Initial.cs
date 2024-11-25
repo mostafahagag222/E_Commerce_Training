@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace E_Commerce1DB_V01.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -61,7 +61,8 @@ namespace E_Commerce1DB_V01.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     HashedPassword = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Role = table.Column<int>(type: "int", nullable: false)
+                    Role = table.Column<int>(type: "int", nullable: false),
+                    IsVerified = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -1,17 +1,12 @@
-﻿using Azure;
-using E_Commerce1DB_V01;
+﻿using E_Commerce1DB_V01;
 using E_Commerce1DB_V01.DTOs;
 using E_Commerce1DB_V01.Entities;
-using E_Commerce1DB_V01.Repositories;
 using E_Commerce2Business_V01.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using E_Commerce2Business_V01.Exceptions;
 
 namespace E_Commerce2Business_V01.Services
 {

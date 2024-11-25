@@ -1,6 +1,5 @@
 ﻿using E_Commerce1DB_V01;
 using E_Commerce1DB_V01.DTOs;
-using E_Commerce1DB_V01.Repositories;
 using E_Commerce2Business_V01.Interfaces;
 
 namespace E_Commerce2Business_V01.Services

@@ -1,14 +1,7 @@
 ﻿using E_Commerce1DB_V01.DTOs;
-using E_Commerce1DB_V01.Repositories.Interfaces;
-using E_Commerce2Business_V01.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+using E_Commerce1DB_V01.Entities;
 
-namespace E_Commerce1DB_V01.Repositories
+namespace E_Commerce1DB_V01.Repositories.Interfaces
 {
     public interface IBasketRepository : IGenericRepository<Basket>
     {
@@ -20,5 +13,6 @@ namespace E_Commerce1DB_V01.Repositories
         Task<ShippingMethodIdAndSubtotalDTO> GetSMIdAndSubTotalAsync(string basketId);
         Task<bool> UpdateBasketAfterAddingBasketItemAsync(string basketID, decimal itemPrice);
         Task<bool> UpdateBasketAfterRemovingBasketItemAsync(string basketID, decimal itemPrice);
+        ECPContext EcpContext { get;  }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 

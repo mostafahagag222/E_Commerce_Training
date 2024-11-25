@@ -1,11 +1,11 @@
 ﻿using E_Commerce1DB_V01.DTOs;
-using E_Commerce2Business_V01.Payloads;
+using E_Commerce1DB_V01.Entities;
+using E_Commerce1DB_V01.Extentsions;
+using E_Commerce1DB_V01.Payloads;
+using E_Commerce1DB_V01.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Dynamic.Core;
-using E_Commerce1DB_V01.Extensions;
 
-
-namespace E_Commerce1DB_V01.Entities
+namespace E_Commerce1DB_V01.Repositories
 {
     public class ProductRepository : GenericRepository<Product>, IProductRepository
     {

@@ -1,14 +1,9 @@
 ﻿using E_Commerce1DB_V01.DTOs;
 using E_Commerce2Business_V01.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using System;
 using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace E_Commerce3APIs_V01.Controllers

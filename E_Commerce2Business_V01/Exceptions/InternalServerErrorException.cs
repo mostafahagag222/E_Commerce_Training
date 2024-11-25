@@ -1,4 +1,4 @@
-﻿namespace E_Commerce2Business_V01
+﻿namespace E_Commerce2Business_V01.Exceptions
 {
     [Serializable]
     public class InternalServerErrorException : Exception

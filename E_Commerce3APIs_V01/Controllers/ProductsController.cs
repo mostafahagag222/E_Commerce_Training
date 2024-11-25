@@ -1,7 +1,7 @@
 ﻿using E_Commerce2Business_V01.Interfaces;
-using E_Commerce2Business_V01.Payloads;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using E_Commerce1DB_V01.Payloads;
 
 namespace E_Commerce3APIs_V01.Controllers
 {
@@ -27,5 +27,12 @@ namespace E_Commerce3APIs_V01.Controllers
         public async Task<IActionResult> GetBrands() => Ok(await _brandService.GetBrandsDTOAsync());
         [HttpGet("Types")]
         public async Task<IActionResult> GetTypes() => Ok(await _typeService.GetTypesDTOAsync());
+        
+        [HttpPost]
+        public async Task<IActionResult> AddNewProduct(AddProductPayload payload)
+        {
+            await _productService.AddNewProductAsync(payload);
+            return NoContent();
+        }
     }
 }

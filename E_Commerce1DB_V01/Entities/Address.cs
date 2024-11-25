@@ -1,6 +1,4 @@
-﻿using E_Commerce1DB_V01.Repositories;
-
-namespace E_Commerce1DB_V01
+﻿namespace E_Commerce1DB_V01.Entities
 {
     public class Address
     {

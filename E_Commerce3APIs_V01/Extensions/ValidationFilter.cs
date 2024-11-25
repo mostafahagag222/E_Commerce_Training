@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System.Linq;
 
-namespace E_Commerce3APIs_V01
+namespace E_Commerce3APIs_V01.Extensions
 {
     public class ValidationFilter : IActionFilter
     {

@@ -1,7 +1,6 @@
-﻿using E_Commerce3APIs_V01;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 
-namespace E_Commerce3APIs_V01;
+namespace E_Commerce3APIs_V01.EnpointsHelper;
 
 public abstract class EndpointGroupBase
 {

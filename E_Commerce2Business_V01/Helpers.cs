@@ -1,10 +1,26 @@
-﻿using System;
+﻿using System.Security.Cryptography;
 using System.Text;
 using Konscious.Security.Cryptography;
 namespace E_Commerce2Business_V01
 {
-    public static class PasswordHasher
+    public static class Helpers
     {
+        //genrate otp
+        public static int GenerateOTP()
+            {
+                var randomNumber = new byte[4]; // 4 bytes to generate a sufficiently large number
+                using (var rng = RandomNumberGenerator.Create())
+                {
+                    rng.GetBytes(randomNumber); // Fill the array with secure random bytes
+                }
+        
+                // Convert the random bytes to a number and limit it to 6 digits
+                var otp = Math.Abs(BitConverter.ToInt32(randomNumber, 0)) % 1000000;
+        
+                // Return the OTP as a 6-digit string (e.g., "012345")
+                return otp;
+            }
+        
         // Method to hash the password (unchanged)
         public static string HashPassword(string password)
         {

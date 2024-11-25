@@ -1,9 +1,9 @@
-﻿using Ardalis.GuardClauses;
+﻿using System;
 using System.Linq;
-using System;
 using System.Reflection;
+using Ardalis.GuardClauses;
 
-namespace E_Commerce3APIs_V01;
+namespace E_Commerce3APIs_V01.EnpointsHelper;
 
 public static class MethodInfoExtensions
 {

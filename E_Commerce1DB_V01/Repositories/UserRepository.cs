@@ -1,5 +1,7 @@
 ﻿using E_Commerce1DB_V01.DTOs;
+using E_Commerce1DB_V01.Entities;
 using E_Commerce1DB_V01.Payloads;
+using E_Commerce1DB_V01.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace E_Commerce1DB_V01.Repositories

@@ -1,12 +1,7 @@
 ﻿using E_Commerce1DB_V01;
 using E_Commerce2Business_V01.Interfaces;
 using E_Commerce2Business_V01.Payloads;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using E_Commerce1DB_V01.Entities;
 
 namespace E_Commerce2Business_V01.Services
 {
@@ -84,6 +79,13 @@ namespace E_Commerce2Business_V01.Services
                 existingBasketItem.Quantity = incomingBasketItem.Quantity;
                 existingBasketItem.Price = incomingBasketItem.Price;
             }
+        }
+
+        public void TestAsync()
+        {
+            var t1 = _unitOfWork.BasketRepository.EcpContext.GetHashCode();
+            var t2 = _unitOfWork.BrandRepository.EcpContext.GetHashCode();
+            Console.WriteLine(t1+"\t"+t2);
         }
 
         #region Old Services

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace E_Commerce1DB_V01.Migrations
 {
     [DbContext(typeof(ECPContext))]
-    [Migration("20241029154254_Init")]
-    partial class Init
+    [Migration("20241122175127_AddUserTokens")]
+    partial class AddUserTokens
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace E_Commerce1DB_V01.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("E_Commerce1DB_V01.Address", b =>
+            modelBuilder.Entity("E_Commerce1DB_V01.Entities.Address", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -61,7 +61,7 @@ namespace E_Commerce1DB_V01.Migrations
                     b.ToTable("Addresses");
                 });
 
-            modelBuilder.Entity("E_Commerce1DB_V01.Basket", b =>
+            modelBuilder.Entity("E_Commerce1DB_V01.Entities.Basket", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -99,7 +99,7 @@ namespace E_Commerce1DB_V01.Migrations
                     b.ToTable("Baskets");
                 });
 
-            modelBuilder.Entity("E_Commerce1DB_V01.BasketItem", b =>
+            modelBuilder.Entity("E_Commerce1DB_V01.Entities.BasketItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -128,7 +128,7 @@ namespace E_Commerce1DB_V01.Migrations
                     b.ToTable("BasketItems");
                 });
 
-            modelBuilder.Entity("E_Commerce1DB_V01.Brand", b =>
+            modelBuilder.Entity("E_Commerce1DB_V01.Entities.Brand", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -142,6 +142,86 @@ namespace E_Commerce1DB_V01.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Brands");
+                });
+
+            modelBuilder.Entity("E_Commerce1DB_V01.Entities.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BasketId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("OrderStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ShippingMethodId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal>("SubTotal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("TotalQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Updated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BasketId")
+                        .IsUnique()
+                        .HasFilter("[BasketId] IS NOT NULL");
+
+                    b.HasIndex("ShippingMethodId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("E_Commerce1DB_V01.Entities.OrderItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("E_Commerce1DB_V01.Entities.Payment", b =>
@@ -217,87 +297,7 @@ namespace E_Commerce1DB_V01.Migrations
                     b.ToTable("paymentLogs");
                 });
 
-            modelBuilder.Entity("E_Commerce1DB_V01.Order", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("BasketId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("OrderStatus")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ShippingMethodId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<decimal>("SubTotal")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("TotalQuantity")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Updated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BasketId")
-                        .IsUnique()
-                        .HasFilter("[BasketId] IS NOT NULL");
-
-                    b.HasIndex("ShippingMethodId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("E_Commerce1DB_V01.OrderItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("OrderItems");
-                });
-
-            modelBuilder.Entity("E_Commerce1DB_V01.Product", b =>
+            modelBuilder.Entity("E_Commerce1DB_V01.Entities.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -337,36 +337,7 @@ namespace E_Commerce1DB_V01.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("E_Commerce1DB_V01.Repositories.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("HashedPassword")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique()
-                        .HasFilter("[Email] IS NOT NULL");
-
-                    b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("E_Commerce1DB_V01.ShippingMethod", b =>
+            modelBuilder.Entity("E_Commerce1DB_V01.Entities.ShippingMethod", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -388,7 +359,7 @@ namespace E_Commerce1DB_V01.Migrations
                     b.ToTable("ShippingMethods");
                 });
 
-            modelBuilder.Entity("E_Commerce1DB_V01.Type", b =>
+            modelBuilder.Entity("E_Commerce1DB_V01.Entities.Type", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -404,9 +375,77 @@ namespace E_Commerce1DB_V01.Migrations
                     b.ToTable("Types");
                 });
 
-            modelBuilder.Entity("E_Commerce1DB_V01.Address", b =>
+            modelBuilder.Entity("E_Commerce1DB_V01.Entities.User", b =>
                 {
-                    b.HasOne("E_Commerce1DB_V01.Repositories.User", "User")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("HashedPassword")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("E_Commerce1DB_V01.Entities.UserToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastUsedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserToken");
+                });
+
+            modelBuilder.Entity("E_Commerce1DB_V01.Entities.Address", b =>
+                {
+                    b.HasOne("E_Commerce1DB_V01.Entities.User", "User")
                         .WithMany("Addresses")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -415,13 +454,13 @@ namespace E_Commerce1DB_V01.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("E_Commerce1DB_V01.Basket", b =>
+            modelBuilder.Entity("E_Commerce1DB_V01.Entities.Basket", b =>
                 {
-                    b.HasOne("E_Commerce1DB_V01.ShippingMethod", "ShippingMethod")
+                    b.HasOne("E_Commerce1DB_V01.Entities.ShippingMethod", "ShippingMethod")
                         .WithMany()
                         .HasForeignKey("ShippingMethodID");
 
-                    b.HasOne("E_Commerce1DB_V01.Repositories.User", "User")
+                    b.HasOne("E_Commerce1DB_V01.Entities.User", "User")
                         .WithMany("Baskets")
                         .HasForeignKey("UserID");
 
@@ -430,14 +469,14 @@ namespace E_Commerce1DB_V01.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("E_Commerce1DB_V01.BasketItem", b =>
+            modelBuilder.Entity("E_Commerce1DB_V01.Entities.BasketItem", b =>
                 {
-                    b.HasOne("E_Commerce1DB_V01.Basket", "Basket")
+                    b.HasOne("E_Commerce1DB_V01.Entities.Basket", "Basket")
                         .WithMany("BasketItems")
                         .HasForeignKey("BasketID")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("E_Commerce1DB_V01.Product", "Product")
+                    b.HasOne("E_Commerce1DB_V01.Entities.Product", "Product")
                         .WithMany("BasketItems")
                         .HasForeignKey("ProductID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -448,17 +487,58 @@ namespace E_Commerce1DB_V01.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("E_Commerce1DB_V01.Entities.Order", b =>
+                {
+                    b.HasOne("E_Commerce1DB_V01.Entities.Basket", "Basket")
+                        .WithOne("Order")
+                        .HasForeignKey("E_Commerce1DB_V01.Entities.Order", "BasketId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("E_Commerce1DB_V01.Entities.ShippingMethod", "ShippingMethod")
+                        .WithMany("Orders")
+                        .HasForeignKey("ShippingMethodId");
+
+                    b.HasOne("E_Commerce1DB_V01.Entities.User", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Basket");
+
+                    b.Navigation("ShippingMethod");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("E_Commerce1DB_V01.Entities.OrderItem", b =>
+                {
+                    b.HasOne("E_Commerce1DB_V01.Entities.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("E_Commerce1DB_V01.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("E_Commerce1DB_V01.Entities.Payment", b =>
                 {
-                    b.HasOne("E_Commerce1DB_V01.Basket", "Basket")
+                    b.HasOne("E_Commerce1DB_V01.Entities.Basket", "Basket")
                         .WithMany("Payments")
                         .HasForeignKey("BasketId");
 
-                    b.HasOne("E_Commerce1DB_V01.Order", "Order")
+                    b.HasOne("E_Commerce1DB_V01.Entities.Order", "Order")
                         .WithMany("Payments")
                         .HasForeignKey("OrderId");
 
-                    b.HasOne("E_Commerce1DB_V01.Repositories.User", "User")
+                    b.HasOne("E_Commerce1DB_V01.Entities.User", "User")
                         .WithMany("Payments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction);
@@ -481,56 +561,15 @@ namespace E_Commerce1DB_V01.Migrations
                     b.Navigation("Payment");
                 });
 
-            modelBuilder.Entity("E_Commerce1DB_V01.Order", b =>
+            modelBuilder.Entity("E_Commerce1DB_V01.Entities.Product", b =>
                 {
-                    b.HasOne("E_Commerce1DB_V01.Basket", "Basket")
-                        .WithOne("Order")
-                        .HasForeignKey("E_Commerce1DB_V01.Order", "BasketId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("E_Commerce1DB_V01.ShippingMethod", "ShippingMethod")
-                        .WithMany("Orders")
-                        .HasForeignKey("ShippingMethodId");
-
-                    b.HasOne("E_Commerce1DB_V01.Repositories.User", "User")
-                        .WithMany("Orders")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Basket");
-
-                    b.Navigation("ShippingMethod");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("E_Commerce1DB_V01.OrderItem", b =>
-                {
-                    b.HasOne("E_Commerce1DB_V01.Order", "Order")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("E_Commerce1DB_V01.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("E_Commerce1DB_V01.Product", b =>
-                {
-                    b.HasOne("E_Commerce1DB_V01.Brand", "Brand")
+                    b.HasOne("E_Commerce1DB_V01.Entities.Brand", "Brand")
                         .WithMany("Products")
                         .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("E_Commerce1DB_V01.Type", "Type")
+                    b.HasOne("E_Commerce1DB_V01.Entities.Type", "Type")
                         .WithMany("Products")
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -541,7 +580,18 @@ namespace E_Commerce1DB_V01.Migrations
                     b.Navigation("Type");
                 });
 
-            modelBuilder.Entity("E_Commerce1DB_V01.Basket", b =>
+            modelBuilder.Entity("E_Commerce1DB_V01.Entities.UserToken", b =>
+                {
+                    b.HasOne("E_Commerce1DB_V01.Entities.User", "User")
+                        .WithMany("Tokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("E_Commerce1DB_V01.Entities.Basket", b =>
                 {
                     b.Navigation("BasketItems");
 
@@ -550,9 +600,16 @@ namespace E_Commerce1DB_V01.Migrations
                     b.Navigation("Payments");
                 });
 
-            modelBuilder.Entity("E_Commerce1DB_V01.Brand", b =>
+            modelBuilder.Entity("E_Commerce1DB_V01.Entities.Brand", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("E_Commerce1DB_V01.Entities.Order", b =>
+                {
+                    b.Navigation("OrderItems");
+
+                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("E_Commerce1DB_V01.Entities.Payment", b =>
@@ -560,19 +617,22 @@ namespace E_Commerce1DB_V01.Migrations
                     b.Navigation("PaymentLogs");
                 });
 
-            modelBuilder.Entity("E_Commerce1DB_V01.Order", b =>
-                {
-                    b.Navigation("OrderItems");
-
-                    b.Navigation("Payments");
-                });
-
-            modelBuilder.Entity("E_Commerce1DB_V01.Product", b =>
+            modelBuilder.Entity("E_Commerce1DB_V01.Entities.Product", b =>
                 {
                     b.Navigation("BasketItems");
                 });
 
-            modelBuilder.Entity("E_Commerce1DB_V01.Repositories.User", b =>
+            modelBuilder.Entity("E_Commerce1DB_V01.Entities.ShippingMethod", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("E_Commerce1DB_V01.Entities.Type", b =>
+                {
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("E_Commerce1DB_V01.Entities.User", b =>
                 {
                     b.Navigation("Addresses");
 
@@ -581,16 +641,8 @@ namespace E_Commerce1DB_V01.Migrations
                     b.Navigation("Orders");
 
                     b.Navigation("Payments");
-                });
 
-            modelBuilder.Entity("E_Commerce1DB_V01.ShippingMethod", b =>
-                {
-                    b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("E_Commerce1DB_V01.Type", b =>
-                {
-                    b.Navigation("Products");
+                    b.Navigation("Tokens");
                 });
 #pragma warning restore 612, 618
         }

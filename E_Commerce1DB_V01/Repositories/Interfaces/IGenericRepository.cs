@@ -1,7 +1,4 @@
-﻿using E_Commerce1DB_V01.DTOs;
-using E_Commerce2Business_V01.Payloads;
-
-namespace E_Commerce1DB_V01.Repositories.Interfaces
+﻿namespace E_Commerce1DB_V01.Repositories.Interfaces
 {
     public interface IGenericRepository<T> where T : class
     {

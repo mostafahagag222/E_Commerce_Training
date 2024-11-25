@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace E_Commerce1DB_V01
+﻿namespace E_Commerce1DB_V01
 {
     public enum Role
     {
@@ -36,5 +30,11 @@ namespace E_Commerce1DB_V01
         Pending = 0,
         SuccessfulPayment,
         FailedPayment
+    }
+
+    public enum TokenType
+    {
+        EmailVerification,
+        
     }
 }

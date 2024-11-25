@@ -1,10 +1,7 @@
-﻿using E_Commerce1DB_V01;
-using E_Commerce1DB_V01.DTOs;
+﻿using E_Commerce1DB_V01.DTOs;
 using E_Commerce2Business_V01.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

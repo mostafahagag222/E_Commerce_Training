@@ -1,10 +1,7 @@
 ﻿using E_Commerce1DB_V01.DTOs;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using E_Commerce1DB_V01.Repositories.Interfaces;
+using Type = E_Commerce1DB_V01.Entities.Type;
 
 namespace E_Commerce1DB_V01.Repositories
 {

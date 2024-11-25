@@ -1,8 +1,4 @@
-﻿using E_Commerce1DB_V01.Entities;
-using E_Commerce1DB_V01.Repositories;
-using System.Globalization;
-
-namespace E_Commerce1DB_V01
+﻿namespace E_Commerce1DB_V01.Entities
 {
     public class Basket
     {

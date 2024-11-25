@@ -1,10 +1,8 @@
 
 using E_Commerce2Business_V01.Interfaces;
-using E_Commerce2Business_V01.Services;
-using E_Commerce3APIs_V01.Controllers;
+using E_Commerce3APIs_V01.EnpointsHelper;
+using E_Commerce3APIs_V01.Extensions;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -45,6 +43,11 @@ namespace E_Commerce3APIs_V01
             app.MapControllers();
 
             app.MapEndpoints();
+            
+            app.MapGet("test/test", (IBasketItemService service) =>
+            {
+                  service.TestAsync();
+            });
 
             app.Run();
         }

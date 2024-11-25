@@ -2,11 +2,8 @@
 using E_Commerce1DB_V01.DTOs;
 using E_Commerce2Business_V01.Interfaces;
 using E_Commerce2Business_V01.Payloads;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using E_Commerce1DB_V01.Entities;
+using E_Commerce2Business_V01.Exceptions;
 
 namespace E_Commerce2Business_V01.Services
 {

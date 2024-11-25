@@ -1,4 +1,4 @@
-﻿namespace E_Commerce2Business_V01.Services
+﻿namespace E_Commerce1DB_V01.DTOs
 {
     public class HandlePaymentPaymentDataDTO
     {

@@ -1,15 +1,11 @@
 ﻿using E_Commerce1DB_V01.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace E_Commerce1DB_V01.Repositories
+namespace E_Commerce1DB_V01.Repositories.Interfaces
 {
     public interface IBrandRepository
     {
         Task<bool> CheckExistenceByIDAsync(int? id);
         Task<List<GetBrandsDTO>> GetBrandsDTOAsync();
+        ECPContext EcpContext { get; }
     }
 }

@@ -1,17 +1,13 @@
 ﻿using E_Commerce1DB_V01.DTOs;
-using E_Commerce2Business_V01.Services;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+using E_Commerce1DB_V01.Entities;
+using E_Commerce1DB_V01.Repositories.Interfaces;
 
 namespace E_Commerce1DB_V01.Repositories
 {
     public class BasketRepository : GenericRepository<Basket>, IBasketRepository
     {
+        public ECPContext EcpContext => context;
         private readonly ECPContext context;
 
         public BasketRepository(ECPContext context) : base(context)

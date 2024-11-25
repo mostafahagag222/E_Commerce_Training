@@ -1,16 +1,15 @@
 ﻿using E_Commerce1DB_V01.DTOs;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using E_Commerce1DB_V01.Entities;
+using E_Commerce1DB_V01.Repositories.Interfaces;
 
 namespace E_Commerce1DB_V01.Repositories
 {
     public class BrandRepository : GenericRepository<Brand>, IBrandRepository
     {
         private readonly ECPContext context;
+        public ECPContext EcpContext => context;
+
 
         public BrandRepository(ECPContext context) : base(context)
         {

@@ -1,7 +1,8 @@
 ﻿using E_Commerce1DB_V01.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+
 //this class works with unit of work as it have no save changes methods
-namespace E_Commerce1DB_V01
+namespace E_Commerce1DB_V01.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {

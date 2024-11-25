@@ -1,6 +1,4 @@
-﻿using E_Commerce1DB_V01;
-using E_Commerce1DB_V01.Entities;
-using E_Commerce1DB_V01.Repositories;
+﻿using E_Commerce1DB_V01.Repositories;
 using E_Commerce1DB_V01.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore.Storage;
 
@@ -20,6 +18,7 @@ namespace E_Commerce1DB_V01
         private readonly Lazy<IOrderItemRepository> _orderItemRepository;
         private readonly Lazy<IPaymentRepository> _paymentRepository;
         private readonly Lazy<IPaymentLogRepository> _paymentLogRepository;
+        private readonly Lazy<IUserTokenRepository> _userTokenRepository;
         private IDbContextTransaction _currentTransaction;
 
         public UnitOfWork(ECPContext context,
@@ -33,7 +32,8 @@ namespace E_Commerce1DB_V01
                           Lazy<IOrderItemRepository> orderItemRepository,
                           Lazy<IOrderRepository> orderRepository,
                           Lazy<IPaymentRepository> paymentRepository,
-                          Lazy<IPaymentLogRepository> paymentLogRepository)
+                          Lazy<IPaymentLogRepository> paymentLogRepository,
+                          Lazy<IUserTokenRepository> userTokenRepository)
         {
             _context = context;
             _userRepository = userRepository;
@@ -47,6 +47,7 @@ namespace E_Commerce1DB_V01
             _orderRepository = orderRepository;
             _paymentRepository = paymentRepository;
             _paymentLogRepository = paymentLogRepository;
+            _userTokenRepository = userTokenRepository;
         }
         public IUserRepository UserRepository => _userRepository.Value;
         public IProductRepository ProductRepository => _productRepository.Value;
@@ -59,6 +60,7 @@ namespace E_Commerce1DB_V01
         public IShippingMethodRepository ShippingMethodRepository => _shippingMethodRepository.Value;
         public IPaymentRepository PaymentRepository => _paymentRepository.Value;
         public IPaymentLogRepository PaymentLogRepository => _paymentLogRepository.Value;
+        public IUserTokenRepository UserTokenRepository => _userTokenRepository.Value;
 
         public async Task<int> SaveChangesAsync()
         {

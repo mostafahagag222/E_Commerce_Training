@@ -1,12 +1,12 @@
-﻿using E_Commerce2Business_V01;
+﻿using System;
+using System.Net;
+using System.Threading.Tasks;
+using E_Commerce2Business_V01.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using System;
-using System.Net;
-using System.Threading.Tasks;
 
-namespace E_Commerce3APIs_V01
+namespace E_Commerce3APIs_V01.Extensions
 {
     public class ExceptionHandlingMiddleware
     {
